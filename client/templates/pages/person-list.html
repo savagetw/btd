@@ -1,0 +1,40 @@
+<template name="personList">
+    <div class="row">
+        <div class="col s12">
+            <h4>People</h4>
+            <p>Find Pescadores by name or other contact details.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            <input id="search" name="search" type="text" class="validate">
+            <label for="search">Find People</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <ul class="collection">
+                {{#if searching}}
+                <li class="collection-item">
+                    <div class="progress">
+                        <div class="indeterminate"></div>
+                    </div>
+                </li>
+                {{else}} {{#each people}}
+                <li class="collection-item">
+                    <a class="secondary-content btn-floating btn-large waves-effect waves-light red">19</a>
+                    <strong class="title">{{name}}</strong>
+                    <br>{{fullCity}}
+                    <br> {{email}} &mdash; {{phone}}
+                </li>
+                {{else}}
+                <li class="collection-item">
+                    <p>We couldn't find anyone matching "{{query}}".</p>
+                </li>
+                {{/each}} {{/if}}
+            </ul>
+        </div>
+    </div>
+</template>

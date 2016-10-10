@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
-import { People } from '/imports/collections.js';
+import { People } from '/imports/people.js';
 
 Template.personList.helpers({
     people() {
@@ -34,7 +34,6 @@ Template.personList.onCreated(() => {
 
 Template.personList.events({
     'keyup [name="search"]'(event, template) {
-        console.log('search keystroke');
         let value = event.target.value.trim();
 
         if (value !== '' && event.keyCode === 13) {

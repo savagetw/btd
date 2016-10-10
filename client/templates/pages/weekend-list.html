@@ -5,4 +5,20 @@
             <p>Browse the list of weekends to reveal their details, teams, and candidates.</p>
         </div>
     </div>
+    <div class="row">
+        <div class="col s12">
+            <ul class="collection">
+                {{#each weekends}}
+                <li class="collection-item">
+                    <span class="right">{{ attendeeCount }} known attendees</span>
+                    <a href="/weekend/{{weekendNumber}}">{{gender}} Weekend {{weekendNumber}}</a>
+                </li>
+                {{else}}
+                <li class="collection-item">
+                    <p>No known weekends.</p>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
 </template>

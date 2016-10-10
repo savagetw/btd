@@ -1,4 +1,5 @@
-import { People } from '/imports/collections.js';
+import { People } from '/imports/people.js';
+import { Weekends } from '/imports/weekends.js';
 import { Meteor } from 'meteor/meteor';
 
 Meteor.publish('people', function (search) {
@@ -23,3 +24,8 @@ Meteor.publish('people', function (search) {
 
     return People.find(query, projection);
 });
+
+Meteor.publish('weekends', function () {
+    return Weekends.find();
+});
+

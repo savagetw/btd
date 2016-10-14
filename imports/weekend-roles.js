@@ -10,5 +10,5 @@ export const WeekendRoleSchema = new SimpleSchema({
     isProfessor: { type: Boolean }
 });
 
-export const WeekendRoles = new Mongo.Collection('weekend-roles');
-WeekendRoles.attachSchema(Schemas.WeekendRoleSchema);
+export const WeekendRoles = new Mongo.Collection('weekendRoles');
+WeekendRoles.attachSchema(WeekendRoleSchema);

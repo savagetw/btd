@@ -3,6 +3,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
 import './templates/pages/home.html';
 import './templates/pages/weekend-list.html';
+import './templates/pages/weekend.html';
 import './templates/pages/person-list.html';
 import './templates/pages/not-found.html';
 
@@ -24,6 +25,15 @@ FlowRouter.route('/weekends', {
     }
 });
 
+FlowRouter.route('/weekends/:gender/:weekendNumber', {
+    name: 'Weekend.show',
+    action() {
+        BlazeLayout.render('layout', {
+            routeTemplate: 'weekend'
+        });
+    }
+});
+
 FlowRouter.route('/people', {
     name: 'Person.list',
     action() {
@@ -33,8 +43,13 @@ FlowRouter.route('/people', {
     }
 });
 
+FlowRouter.renderNotFound = () => {
+    BlazeLayout.render('layout', { routeTemplate: 'notFound', title: 'Oops!'});
+};
+
 FlowRouter.notFound = {
     action() {
-        BlazeLayout.render('layout', { routeTemplate: 'notFound', title: 'Oops!'});
+        FlowRouter.renderNotFound();
     }
 };
+

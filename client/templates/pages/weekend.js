@@ -10,34 +10,71 @@ Template.weekend.helpers({
     weekendTitle() {
         let weekend = Template.instance().weekend.get();
         if (!weekend) {
-            return;
+            return 'Loading...';
         }
         let genderTitle = weekend.gender === 'Male' ? 'Men\'s' : 'Women\'s';
-        return weekend.community + ': ' + genderTitle + ' Weekend #' + weekend.weekendNumber;
+        return genderTitle + ' Weekend #' + weekend.weekendNumber;
     },
-    name(person) {
-        if (!person) {
-            return;
-        }
-        return (person.preferredName || person.firstName) + ' ' + person.lastName;
-    },
-    attendees() {
+    rectorName() {
         let template = Template.instance();
         let attendees = template.attendees.get();
-        if (attendees) {
-            return attendees;
+        if (!attendees) {
+            return 'Unknown';
         }
+        let found = attendees.find(function (attendee) {
+            return attendee.role.title === 'Rector';
+        });
+        if (!found) {
+            return 'Unknown';
+        }
+        return getName(found.person);
+    },
+    name: getName,
+    attendees() {
+        var attendees = Template.instance().attendees.get();
+        console.log('attendees helper', attendees);
+        return attendees;
+    }
+});
 
-        let weekend = template.weekend.get();
+function getName(person) {
+    if (!person) {
+        return 'John Doe';
+    }
+    return (person.preferredName || person.firstName) + ' ' + person.lastName;
+};
+
+Template.weekend.onCreated(() => {
+    let template = Template.instance();
+    template.weekendNumber = parseInt(FlowRouter.getParam('weekendNumber'), 10);
+    template.gender = FlowRouter.getParam('gender');
+    template.weekend = new ReactiveVar();
+    template.attendees = new ReactiveVar();
+
+    template.autorun(() => {
+        template.subscribe('weekend-details', template.weekendNumber, template.gender);
+
+        let weekend = Weekends.findOne({weekendNumber: template.weekendNumber, gender: template.gender});
         if (!weekend) {
             return;
         }
 
-        let roles = WeekendRoles.find().fetch();
-        console.log('all roles:', roles);
-        let personIds = weekend.attendees.map(function (attendee) {
+        template.weekend.set(weekend);
+
+        template.subscribe('weekend-roles');
+
+        let attendees = weekend.attendees;
+        let personIds = attendees.map(function (attendee) {
             return attendee.personId;
         });
+
+        if (personIds.length === 0) {
+            return;
+        }
+
+        template.subscribe('attendee-details', personIds);
+
+        let roles = WeekendRoles.find().fetch();
         let people = People.find(
             {"_id": {"$in": personIds}},
             {fields: {preferredName: 1, firstName: 1, lastName: 1}}
@@ -47,8 +84,7 @@ Template.weekend.helpers({
             return;
         }
 
-        let resolved = weekend.attendees.map(function (unresolvedAttendee) {
-            console.log('resolving', unresolvedAttendee);
+        template.attendees.set(attendees.map(function (unresolvedAttendee) {
             return {
                 person: people.find(function (person) {
                     return person._id === unresolvedAttendee.personId;
@@ -57,37 +93,6 @@ Template.weekend.helpers({
                     return role._id === unresolvedAttendee.roleId;
                 })
             };
-        });
-        console.log('resolved:', resolved);
-        template.attendees.set(resolved);
-        return resolved;
-    }
-});
-
-Template.weekend.onCreated(() => {
-    let weekendNumber = parseInt(FlowRouter.getParam('weekendNumber'), 10);
-    let gender = FlowRouter.getParam('gender');
-    let template = Template.instance();
-
-    template.weekend = new ReactiveVar();
-    template.attendees = new ReactiveVar();
-
-    template.autorun(() => {
-        template.subscribe('weekend-details', weekendNumber, gender, () => {
-
-            let weekend = Weekends.findOne({weekendNumber: weekendNumber, gender: gender});
-            if (!weekend) {
-                FlowRouter.renderNotFound();
-                return;
-            }
-
-            template.subscribe('weekend-roles');
-
-            template.weekend.set(weekend);
-            let personIds = weekend.attendees.map(function (attendee) {
-                return attendee.personId;
-            });
-            template.subscribe('attendee-details', personIds);
-        });
+        }));
     });
 });

@@ -39,6 +39,5 @@ Meteor.publish('weekend-details', function (weekendNumber, gender) {
 });
 
 Meteor.publish('attendee-details', function (personIds) {
-    console.log('Publishing attendee-details for', personIds);
     return People.find({"_id": {"$in": personIds}});
 });

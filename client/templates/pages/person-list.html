@@ -13,28 +13,31 @@
             <label for="search">Find People</label>
         </div>
     </div>
-    <div class="row">
-        <div class="col s12">
-            <ul class="collection">
-                {{#if searching}}
-                <li class="collection-item">
-                    <div class="progress">
-                        <div class="indeterminate"></div>
+
+    {{#if searching}}
+        <li class="collection-item">
+            <div class="progress">
+                <div class="indeterminate"></div>
+            </div>
+        </li>
+    {{else}} 
+        {{#each people}}
+            <div class="row">
+                <div class="col s12">
+                    <div class="card darken-1 hoverable">
+                        <a href="/people/{{_id}}">
+                        <div class="card-content">
+                            <a class="secondary-content">Weekend #</a>
+                            <strong class="title">{{name}}</strong>
+                            <br>{{fullCity}}
+                            <br> {{email}} &mdash; {{phone}}
+                        </div>
+                        </a>
                     </div>
-                </li>
-                {{else}} {{#each people}}
-                <li class="collection-item hoverable">
-                    <a class="secondary-content btn-floating btn-large waves-effect waves-light red">19</a>
-                    <strong class="title">{{name}}</strong>
-                    <br>{{fullCity}}
-                    <br> {{email}} &mdash; {{phone}}
-                </li>
-                {{else}}
-                <li class="collection-item">
-                    <p>We couldn't find anyone matching "{{query}}".</p>
-                </li>
-                {{/each}} {{/if}}
-            </ul>
-        </div>
-    </div>
+                </div>
+            </div>
+        {{else}}
+            <h3>We couldn't find anyone matching "{{query}}".</h3>
+        {{/each}}
+    {{/if}}
 </template>

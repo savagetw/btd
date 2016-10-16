@@ -64,6 +64,13 @@ People.helpers({
             return 'Unknown'
         }
         return this.address.city + ', ' + this.address.state;
+    },
+    fullName() {
+        let preferred = ' ';
+        if (this.preferredName) {
+            preferred = ' "' + preferredName + '" ';
+        }
+        return this.firstName + preferred + this.lastName;
     }
 });
 

@@ -43,6 +43,15 @@ FlowRouter.route('/people', {
     }
 });
 
+FlowRouter.route('/people/:id', {
+    name: 'Person.show',
+    action() {
+        BlazeLayout.render('layout', {
+            routeTemplate: 'person'
+        });
+    }
+});
+
 FlowRouter.renderNotFound = () => {
     BlazeLayout.render('layout', { routeTemplate: 'notFound', title: 'Oops!'});
 };

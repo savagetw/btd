@@ -1,4 +1,5 @@
 import { Mongo } from 'meteor/mongo';
+import { Spacebars } from 'meteor/spacebars';
 
 export const LocationSchema = new SimpleSchema({
     street: { type: String, max: 150 },
@@ -40,6 +41,7 @@ export const PersonSchema = new SimpleSchema({
     address: { type: LocationSchema },
     phoneNumbers: { type: [PhoneNumberSchema] },
     emailAddresses: { type: [EmailSchema] },
+    candidateOn: { type: Number, defaultValue: 0 },
     createdAt: {
         type: Date,
         denyUpdate: true
@@ -59,6 +61,19 @@ People.helpers({
     phone() {
         return findPreferred(this.phoneNumbers, 'digits') || 'Unknown phone';
     },
+    phoneList() {
+        if (!this.phoneNumbers) {
+            return 'No known contact numbers.';
+        }
+
+        return Spacebars.SafeString('<ul>' + this.phoneNumbers.map((phone) => {
+            return [
+                '<li>',
+                phone.isPreferred ? '<em>' + phone.digits + '</em>' : phone.digits,
+                phone.canTxt ? ' (txt)' : '',
+                '</li>'].join('');
+        }) + '</ul>');
+    },
     fullCity() {
         if (!this.address || !this.address.city || !this.address.state) {
             return 'Unknown'
@@ -71,6 +86,29 @@ People.helpers({
             preferred = ' "' + preferredName + '" ';
         }
         return this.firstName + preferred + this.lastName;
+    },
+    age() {
+        return this.gender === 'female' ? 'A woman never tells' : this.birthDate;
+    },
+    addressLabel() {
+        if (!this.address || !this.address.city || !this.address.state) {
+            return 'Unknown'
+        }
+        let fullCity = this.address.city + ', ' + this.address.state;
+        if (!this.street || !this.zip) {
+            return fullCity;
+        }
+        return this.street + '<br>' + fullCity + ' ' + this.zip;
+    },
+    candidateWeekend() {
+        if (this.candidateOn === 0) {
+            return 'Unknown weekend';
+        }
+        let gender = capitalizeFirstLetter(this.gender);
+        return Spacebars.SafeString([
+            '<a href="/weekends/', gender, '/', this.candidateOn, '">',
+            gender + ' Weekend #' + this.candidateOn,
+            '</a>'].join(''));
     }
 });
 
@@ -89,3 +127,7 @@ function findPreferred(list, fieldName) {
     }
     return preferred;
 }
+
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};

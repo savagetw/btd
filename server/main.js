@@ -28,7 +28,7 @@ Meteor.publish('people', function (search) {
 
 Meteor.publish('person', function (id) {
     return People.find({'_id': id});
-})
+});
 
 Meteor.publish('weekends', function () {
     return Weekends.find();

@@ -6,10 +6,20 @@ import { People } from '/imports/people.js';
 
 Template.person.helpers({
     person() {
-        let template = Template.instance();
-        let person = People.findOne({'_id': template._id});
-        template.person.set(person);
-        return person;
+        return Template.instance().person.get();
+    },
+    experiences() {
+        let person = Template.instance().person.get();
+        if (!person || !person.experience) {
+            return;
+        }
+
+        return Object.keys(person.experience).map(function (weekendLabel) {
+            return {
+                weekendLabel: weekendLabel,
+                role: person.experience[weekendLabel]
+            };
+        });
     }
 });
 
@@ -20,5 +30,12 @@ Template.person.onCreated(() => {
 
     template.autorun(() => {
         template.subscribe('person', template._id);
+
+        let person = People.findOne({'_id': template._id});
+        if (!person) {
+            return;
+        }
+        template.person.set(person);
+        return person;
     });
 });

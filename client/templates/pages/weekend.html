@@ -12,8 +12,8 @@
             <ul class="collection">
                 {{#each attendees}}
                 <li class="collection-item">
-                    <span class="right">{{ role.title }}</span>
-                    <a href="/people/{{ person._id }}">{{ name(person) }}</a>
+                    <span class="right">{{ roleTitle }}</span>
+                    <a href="/people/{{ personId }}">{{ name(person) }}</a>
                 </li>
                 {{else}}
                 <li class="collection-item">

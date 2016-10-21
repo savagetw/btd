@@ -16,24 +16,27 @@ Template.weekend.helpers({
         return genderTitle + ' Weekend #' + weekend.weekendNumber;
     },
     rectorName() {
-        let template = Template.instance();
-        let attendees = template.attendees.get();
-        if (!attendees) {
-            return 'Unknown';
+        let weekend = Template.instance().weekend.get();
+        if (!weekend) {
+            return;
         }
-        let found = attendees.find(function (attendee) {
-            return attendee.role.title === 'Rector';
+        let attendance = weekend.attendees.find(function (attendee) {
+            return attendee.roleTitle === 'Rector';
         });
-        if (!found) {
-            return 'Unknown';
+
+        if (!attendance) {
+            return;
         }
-        return getName(found.person);
+
+        return getName(attendance.person);
     },
     name: getName,
     attendees() {
-        var attendees = Template.instance().attendees.get();
-        console.log('attendees helper', attendees);
-        return attendees;
+        let weekend = Template.instance().weekend.get();
+        if (!weekend) {
+            return;
+        }
+        return weekend.attendees;
     }
 });
 
@@ -49,50 +52,13 @@ Template.weekend.onCreated(() => {
     template.weekendNumber = parseInt(FlowRouter.getParam('weekendNumber'), 10);
     template.gender = FlowRouter.getParam('gender');
     template.weekend = new ReactiveVar();
-    template.attendees = new ReactiveVar();
 
     template.autorun(() => {
         template.subscribe('weekend-details', template.weekendNumber, template.gender);
-
         let weekend = Weekends.findOne({weekendNumber: template.weekendNumber, gender: template.gender});
         if (!weekend) {
             return;
         }
-
         template.weekend.set(weekend);
-
-        template.subscribe('weekend-roles');
-
-        let attendees = weekend.attendees;
-        let personIds = attendees.map(function (attendee) {
-            return attendee.personId;
-        });
-
-        if (personIds.length === 0) {
-            return;
-        }
-
-        template.subscribe('attendee-details', personIds);
-
-        let roles = WeekendRoles.find().fetch();
-        let people = People.find(
-            {"_id": {"$in": personIds}},
-            {fields: {preferredName: 1, firstName: 1, lastName: 1}}
-        ).fetch();
-
-        if (people.length === 0 || roles.length === 0) {
-            return;
-        }
-
-        template.attendees.set(attendees.map(function (unresolvedAttendee) {
-            return {
-                person: people.find(function (person) {
-                    return person._id === unresolvedAttendee.personId;
-                }),
-                role: roles.find(function (role) {
-                    return role._id === unresolvedAttendee.roleId;
-                })
-            };
-        }));
     });
 });

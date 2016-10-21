@@ -6,6 +6,22 @@ This is a Meteor.js app for managing the BTD community database.
 
 Install Meteor, checkout, do a `meteor run`.
 
+## Importing Migrated Database
+
+```
+C:\Users\savagetw\Source\btd-migrate\output>"\Program Files\MongoDB\Server\3.2\bin\mongoimport.exe" --host localhost:3001 --collection weekends --db meteor --jsonArray --file weekends.json
+2016-10-20T22:14:33.396-0500    connected to: localhost:3001
+2016-10-20T22:14:33.496-0500    imported 70 documents
+
+C:\Users\savagetw\Source\btd-migrate\output>"\Program Files\MongoDB\Server\3.2\bin\mongoimport.exe" --host localhost:3001 --collection weekendRoles --db meteor --jsonArray --file weekend-roles.json
+2016-10-20T22:14:42.852-0500    connected to: localhost:3001
+2016-10-20T22:14:42.855-0500    imported 47 documents
+
+C:\Users\savagetw\Source\btd-migrate\output>"\Program Files\MongoDB\Server\3.2\bin\mongoimport.exe" --host localhost:3001 --collection people --db meteor --jsonArray --file people.json
+2016-10-20T22:14:54.510-0500    connected to: localhost:3001
+2016-10-20T22:14:54.720-0500    imported 2816 documents
+```
+
 ## User Stories for the BTD Rector Access Database Application
 
 ### I'm a rector developing my team list, I need to...

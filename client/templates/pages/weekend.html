@@ -1,0 +1,26 @@
+<template name="weekend">
+    <div class="row">
+        <div class="col s12">
+            <h2>{{weekendTitle}}</h2>
+            {{#if rectorName}}<h4>Rector: {{rectorName}}</h4>{{/if}}
+            <br>
+            <p>Details and attendees list for the weekend.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <ul class="collection">
+                {{#each attendees}}
+                <li class="collection-item">
+                    <span class="right">{{ roleTitle }}</span>
+                    <a href="/people/{{ personId }}">{{ name(person) }}</a>
+                </li>
+                {{else}}
+                <li class="collection-item">
+                    <p>No known attendees.</p>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</template>

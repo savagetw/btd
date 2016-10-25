@@ -1,0 +1,46 @@
+<template name="person">
+    {{#with person}}
+    <div class="person-details">
+        <div class="row">
+            <div class="col s12">
+                <h2>{{name}}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <label>Full name</label> {{fullName}}
+            </div>
+            <div class="col s6">
+                <label>Candidate On</label> {{candidateWeekend}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                {{#if age}}<label>Age</label> {{age}}{{/if}}
+            </div>
+            <div class="col s6">
+                <label>Gender</label> {{gender}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <label>Address</label> {{addressLabel}}
+            </div>
+            <div class="col s6">
+                <label>Phone</label> {{phoneList}}
+            </div>
+        </div>
+    </div>
+    <div class="person-experience">
+        <ul>
+            {{#each experiences}}
+            <li><em>{{weekendLabel}}</em> {{role}}</li>
+            {{else}}
+            <em>Experiences aren't available for {{name}}.</em>
+            {{/each}}
+        </ul>
+    </div>
+    {{else}}
+    <h4>Loading...</h4>
+    {{/with}}
+</template>

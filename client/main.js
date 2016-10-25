@@ -1,2 +1,2 @@
+import '/imports/auth.js';
 import './routes.js';
-import './head.html';

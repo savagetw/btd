@@ -10,7 +10,12 @@
     </nav>
 
     <main class="container">
-        {{>Template.dynamic template=routeTemplate}}
+        {{> loginButtons}}
+        {{#if currentUser}}
+            {{>Template.dynamic template=routeTemplate}}
+        {{else}}
+            <h3>Login to browse database.</h3>
+        {{/if}}
     </main>
 
     <footer class="page-footer">

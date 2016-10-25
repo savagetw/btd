@@ -22,7 +22,8 @@ FlowRouter.route('/weekends', {
         BlazeLayout.render('layout', {
             routeTemplate: 'weekendList'
         });
-    }
+    },
+    triggersEnter: [isAuthenticated]
 });
 
 FlowRouter.route('/weekends/:gender/:weekendNumber', {
@@ -31,7 +32,8 @@ FlowRouter.route('/weekends/:gender/:weekendNumber', {
         BlazeLayout.render('layout', {
             routeTemplate: 'weekend'
         });
-    }
+    },
+    triggersEnter: [isAuthenticated]
 });
 
 FlowRouter.route('/people', {
@@ -40,7 +42,8 @@ FlowRouter.route('/people', {
         BlazeLayout.render('layout', {
             routeTemplate: 'personList'
         });
-    }
+    },
+    triggersEnter: [isAuthenticated]
 });
 
 FlowRouter.route('/people/:id', {
@@ -49,7 +52,8 @@ FlowRouter.route('/people/:id', {
         BlazeLayout.render('layout', {
             routeTemplate: 'person'
         });
-    }
+    },
+    triggersEnter: [isAuthenticated]
 });
 
 FlowRouter.renderNotFound = () => {
@@ -62,3 +66,9 @@ FlowRouter.notFound = {
     }
 };
 
+function isAuthenticated(context, redirect) {
+    var user = Meteor.user();
+    if (!user || user.username !== 'admin@btresdias.org') {
+        redirect('/');
+    }
+}

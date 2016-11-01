@@ -19,7 +19,7 @@
                 {{#if age}}<label>Age</label> {{age}}{{/if}}
             </div>
             <div class="col s6">
-                <label>Gender</label> {{gender}}
+                <label>Email</label> {{email}}
             </div>
         </div>
         <div class="row">
@@ -32,13 +32,19 @@
         </div>
     </div>
     <div class="person-experience">
-        <ul>
-            {{#each experiences}}
-            <li><em>{{weekendLabel}}</em> {{role}}</li>
-            {{else}}
+        {{#if groupedExperiences}}
+            <h3>Experiences</h3>
+            <ul class="collection">
+                {{#each roleTitle in groupedExperiences}}
+                    <li class="collection-item">
+                        {{roleTitle}}
+                        &mdash; {{{weekendLinks roleTitle}}}
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
             <em>Experiences aren't available for {{name}}.</em>
-            {{/each}}
-        </ul>
+        {{/if}}
     </div>
     {{else}}
     <h4>Loading...</h4>

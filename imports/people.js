@@ -26,6 +26,12 @@ export const ChurchSchema = new SimpleSchema({
     pastorPersonId: { type: String, regEx: SimpleSchema.RegEx.Id, optional: true }
 });
 
+export const ExperienceSchema = new SimpleSchema({
+    roleTitle: { type: String },
+    weekendGender: { type: String },
+    weekendNumber: { type: Number }
+});
+
 export const PersonSchema = new SimpleSchema({
     _id: {
         type: String,
@@ -40,8 +46,9 @@ export const PersonSchema = new SimpleSchema({
     shirtSize: { type: String, allowedValues: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL'], defaultValue: 'XL' },
     address: { type: LocationSchema },
     phoneNumbers: { type: [PhoneNumberSchema] },
-    emailAddresses: { type: [EmailSchema] },
+    emails: { type: [EmailSchema] },
     candidateOn: { type: Number, defaultValue: 0 },
+    experiences: { type: [ExperienceSchema]},
     createdAt: {
         type: Date,
         denyUpdate: true
@@ -114,6 +121,13 @@ People.helpers({
             '<a href="/weekends/', gender, '/', this.candidateOn, '">',
             gender + ' Weekend #' + this.candidateOn,
             '</a>'].join(''));
+    },
+    experienceLink(experience) {
+        let gender = experience.weekendGender;
+        let number = experience.weekendNumber;
+        return '<a href="/weekends/' + gender + '/' + number + '">'
+            + gender + ' #' + number
+            + '</a>';
     }
 });
 

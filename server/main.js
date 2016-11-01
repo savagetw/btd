@@ -3,27 +3,54 @@ import { Weekends } from '/imports/weekends.js';
 import { WeekendRoles } from '/imports/weekend-roles.js';
 import { Meteor } from 'meteor/meteor';
 
-Meteor.publish('people', function (search) {
+Meteor.publish('people-search', function (search) {
     check(search, Match.OneOf(String, null, undefined));
 
     let query = {};
     let projection = { limit: 10, sort: { lastName: 1, firstName: 1 } };
 
     if (search) {
+        let words = search.split(' ');
+        let queries = [];
+        words.forEach(function (word) {
+            let regexStr = '';
+            for (let i = 0, len = word.length; i < len; i++) {
+                regexStr += word[i];
+                if (i < len) {
+                    regexStr += '.*';
+                }
+            }
+            console.log('Search word: ', regexStr);
+            let regex = new RegExp(regexStr, 'i');
+
+            let query = {$or: []};
+            ['firstName', 'preferredName', 'lastName', 'address.city'].forEach(function (field) {
+                let orQuery = {};
+                orQuery[field] = regex;
+                query.$or.push(orQuery);
+            });
+
+            let emailquery = {
+                'emails': {
+                    $elemMatch: {'address': regex}
+                }
+            };
+
+            query.$or.push(emailquery);
+            console.log('email:', emailquery);
+
+            queries.push(query);
+        });
+
         let regex = new RegExp(search, 'i');
-        query = {
-            $or: [
-                { firstName: regex },
-                { preferredName: regex },
-                { lastName: regex },
-                { email: regex }
-            ]
-        };
-
         projection.limit = 100;
+        query.$and = queries;
     }
-
     return People.find(query, projection);
+});
+
+Meteor.publish('people', function () {
+    return People.find();
 });
 
 Meteor.publish('person', function (id) {
@@ -34,7 +61,7 @@ Meteor.publish('weekends', function () {
     return Weekends.find();
 });
 
-Meteor.publish('weekend-roles', function () {
+Meteor.publish('weekendRoles', function () {
     return WeekendRoles.find();
 });
 

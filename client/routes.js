@@ -36,7 +36,7 @@ FlowRouter.route('/weekends/:gender/:weekendNumber', {
     triggersEnter: [isAuthenticated]
 });
 
-FlowRouter.route('/people', {
+FlowRouter.route('/people/:subview?', {
     name: 'Person.list',
     action() {
         BlazeLayout.render('layout', {
@@ -46,7 +46,7 @@ FlowRouter.route('/people', {
     triggersEnter: [isAuthenticated]
 });
 
-FlowRouter.route('/people/:id', {
+FlowRouter.route('/person/:id', {
     name: 'Person.show',
     action() {
         BlazeLayout.render('layout', {

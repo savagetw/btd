@@ -1,0 +1,26 @@
+<template name="peopleByRole">
+	<div class="input-field col s12">
+		<select name="role">
+            <option value="" disabled selected>Choose your option</option>
+            {{#each role in roles}}
+            <option value="{{role.title}}">{{role.title}}</option>
+            {{/each}}
+        </select>
+		<label>Role Select</label>
+    </div>
+
+    {{#if people}}
+        <h1>People with {{selectedRole}} Experience</h1>
+        <ul class="collection">
+        {{#each person in people}}
+            <li class="collection-item">
+                <a href="/person/{{person._id}}">{{person.fullName}}</a> 
+                &mdash;
+                {{{experienceLinks person selectedRole}}}
+            </li>
+        {{/each}}
+        </ul>
+    {{else}}
+        <h3>Please select a role.</h3>
+    {{/if}}
+</template>

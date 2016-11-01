@@ -6,23 +6,40 @@ import { People } from '/imports/people.js';
 
 Template.person.helpers({
     person() {
-        return Template.instance().person.get();
-    },
-    experiences() {
         let person = Template.instance().person.get();
-        if (!person || !person.experience) {
-            return;
+        if (person && person.experiences) {
+            person.groupedExperiences = person.experiences.reduce(function (groups, experience) {
+                let role = experience.roleTitle;
+                groups[role] = groups[role] || [];
+                groups[role].push(experience);
+                return groups;
+            }, {});
         }
 
-        return Object.keys(person.experience).map(function (weekendLabel) {
-            return {
-                weekendLabel: weekendLabel,
-                role: person.experience[weekendLabel]
-            };
-        });
+        return person;
+    },
+    groupedExperiences() {
+        let person = Template.instance().person.get();
+        return person && person.groupedExperiences && Object.keys(person.groupedExperiences);
     },
     defaultIf(value, defaultValue) {
         return value || defaultValue;
+    },
+    weekendLinks(roleTitle) {
+        let person = Template.instance().person.get();
+
+        console.log('Grouped experiences:', person.groupedExperiences);
+        return person.groupedExperiences[roleTitle].reduce(function (html, experience) {
+            if (html) {
+                html += ', ';
+            }
+
+            let gender = experience.weekendGender;
+            let number = experience.weekendNumber;
+            return html + '<a href="/weekends/' + gender + '/' + number + '">'
+                + gender + ' #' + number
+                + '</a>';
+        }, '');
     }
 });
 

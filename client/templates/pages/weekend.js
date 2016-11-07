@@ -6,6 +6,8 @@ import { Weekends } from '/imports/weekends.js';
 import { WeekendRoles } from '/imports/weekend-roles.js';
 import { People } from '/imports/people.js';
 
+import _ from 'lodash';
+
 Template.weekend.helpers({
     weekendTitle() {
         let weekend = Template.instance().weekend.get();
@@ -31,14 +33,40 @@ Template.weekend.helpers({
         return getName(attendance.person);
     },
     name: getName,
-    attendees() {
+    team() {
         let weekend = Template.instance().weekend.get();
-        if (!weekend) {
-            return;
+        if (weekend) {
+            let team = weekend.attendees.filter(function (attendee) {
+                return attendee.role.title !== 'Candidate';
+            });
+
+            let byRole = _.groupBy(team, function (attendee) {
+                return attendee.role.title
+                    .replace(/ *.Assistant. */, '')
+                    .replace(/.*Professor.*/, 'Professor');
+            });
+
+            team = [];
+            _.forEach(byRole, function (attendees, roleTitle) {
+                team = team.concat(
+                    _.orderBy(attendees, ['role.title', 'role.isHead'], ['desc', 'desc'])
+                );
+            });
+
+            return team;
         }
-        return weekend.attendees;
-    }
-});
+    },
+    candidates() {
+        let weekend = Template.instance().weekend.get();
+        if (weekend) {
+            let candidates = weekend.attendees.filter(function (attendee) {
+                return attendee.role.title === 'Candidate';
+            }).map(function (attendee) {
+                return attendee.person;
+            });
+            return _.sortBy(candidates, 'table');
+        }
+    }});
 
 function getName(person) {
     if (!person) {

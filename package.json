@@ -5,6 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "lodash": "^4.16.6",
     "meteor-node-stubs": "~0.2.0",
     "simple-schema": "^1.1.0"
   },

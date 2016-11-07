@@ -20,7 +20,6 @@ Meteor.publish('people-search', function (search) {
                     regexStr += '.*';
                 }
             }
-            console.log('Search word: ', regexStr);
             let regex = new RegExp(regexStr, 'i');
 
             let query = {$or: []};
@@ -37,8 +36,6 @@ Meteor.publish('people-search', function (search) {
             };
 
             query.$or.push(emailquery);
-            console.log('email:', emailquery);
-
             queries.push(query);
         });
 
@@ -49,8 +46,8 @@ Meteor.publish('people-search', function (search) {
     return People.find(query, projection);
 });
 
-Meteor.publish('people', function () {
-    return People.find();
+Meteor.publish('people', function (filter) {
+    return People.find(filter);
 });
 
 Meteor.publish('person', function (id) {

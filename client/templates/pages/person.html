@@ -6,34 +6,94 @@
                 <h2>{{name}}</h2>
             </div>
         </div>
+        
         <div class="row">
-            <div class="col s6">
-                <label>Full name</label> {{fullName}}
+            <div class="col s3">
+                <label>Full name</label><br>
+                <span>{{fullName}}</span>
             </div>
-            <div class="col s6">
-                <label>Candidate On</label> {{candidateWeekend}}
+
+            {{#if candidateOn}}
+            <div class="col s3">
+                <label>Candidate On</label><br>
+                <span>{{candidateWeekend}}</span>
             </div>
+
+                {{#if table}}
+                <div class="col s3">
+                    <label>Table Of</label><br>
+                    <span>{{table}}</span>
+                </div>
+                {{/if}}
+            {{/if}}
         </div>
+
         <div class="row">
-            <div class="col s6">
-                {{#if age}}<label>Age</label> {{age}}{{/if}}
+           {{#if status}}
+            <div class="col s3">
+                <label>Status</label><br>
+                {{status}}
             </div>
-            <div class="col s6">
-                <label>Email</label> {{email}}
+            {{/if}}
+
+            {{#if sponsor}}
+            <div class="col s3">
+                <label>Sponsor</label><br>
+                <a href="/person/{{sponsor._id}}">{{sponsor.firstName}} {{sponsor.lastName}}</a>
             </div>
+            {{/if}}
+
+            {{#if spouse}}
+            <div class="col s3">
+                <label>Spouse</label><br>
+                <a href="/person/{{spouse._id}}">{{spouse.firstName}} {{spouse.lastName}}</a>
+            </div>
+            {{/if}}
         </div>
+
         <div class="row">
-            <div class="col s6">
-                <label>Address</label> {{addressLabel}}
+            {{#if email}}
+            <div class="col s3">
+                <label>Email</label><br>
+                {{email}}
             </div>
-            <div class="col s6">
-                <label>Phone</label> {{phoneList}}
+            {{/if}}
+
+            {{#if addressLabel}}
+            <div class="col s3">
+                <label>Address</label><br>
+                {{addressLabel}}
             </div>
+            {{/if}}
+
+            {{#if phoneList}}
+            <div class="col s3">
+                <label>Phone</label><br>
+                {{{phoneList}}}
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="row">
+            {{#if experiences.length}}
+            <div class="col s3">
+                <label>Weekends Worked</label><br>
+                {{experiences.length}}
+            </div>
+            {{/if}}
+
+            {{#if totalSponsored}}
+            <div class="col s3">
+                <label>Candidates Sponsored</label><br>
+                {{totalSponsored}}
+            </div>
+            {{/if}}
+            <div class="col s3"></div>
         </div>
     </div>
     <div class="person-experience">
+        <h4>Team Experiences</h4>
         {{#if groupedExperiences}}
-            <h3>Experiences</h3>
             <ul class="collection">
                 {{#each roleTitle in groupedExperiences}}
                     <li class="collection-item">
@@ -42,10 +102,28 @@
                     </li>
                 {{/each}}
             </ul>
+            <sub class="right">*denotes position served as head.</sub>
         {{else}}
-            <em>Experiences aren't available for {{name}}.</em>
+            <em>This pescadore has no recorded team experiences.</em>
         {{/if}}
     </div>
+
+    <div class="person-experience">
+        <h4>Sponsored</h4>
+        {{#if candidatesSponsored}}
+            <ul class="collection">
+                {{#each sponsoredPerson in candidatesSponsored}}
+                    <li class="collection-item">
+                        <a href="/person/{{sponsoredPerson._id}}">{{sponsoredPerson.name}}</a>
+                        &mdash; {{sponsoredPerson.candidateWeekend}}
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <em>This pescadore has not sponsored any other candidates.</em>
+        {{/if}}
+    </div>
+
     {{else}}
     <h4>Loading...</h4>
     {{/with}}

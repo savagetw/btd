@@ -73,13 +73,19 @@ People.helpers({
             return 'No known contact numbers.';
         }
 
-        return Spacebars.SafeString('<ul>' + this.phoneNumbers.map((phone) => {
-            return [
-                '<li>',
-                phone.isPreferred ? '<em>' + phone.digits + '</em>' : phone.digits,
+        return this.phoneNumbers.reduce((html, phone) => {
+            if (html) {
+                html += '<br>';
+            }
+
+            let phoneHtml = [
+                phone.digits,
                 phone.canTxt ? ' (txt)' : '',
-                '</li>'].join('');
-        }) + '</ul>');
+                phone.isPreferred ? ' (preferred)' : ''
+            ].join('');
+
+            return html + phoneHtml;
+        }, '');
     },
     fullCity() {
         if (!this.address || !this.address.city || !this.address.state) {

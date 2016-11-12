@@ -22,6 +22,22 @@ C:\Users\savagetw\Source\btd-migrate\output>"\Program Files\MongoDB\Server\3.2\b
 2016-10-20T22:14:54.720-0500    imported 2816 documents
 ```
 
+## Production deployment
+
+```
+Deploy local build to production hosting:
+cmd>  meteor build ..\ --architecture os.linux.x86_64
+bash> scp btd-meteor.tar.gz btdapp@btresdias.org:.
+bash> ssh btdapp@btresdias.org
+btdapp@btresdias.org> tar xzf btd-meteor.tar.gz
+btdapp@btresdias.org> (cd bundle/programs/server && ~/node*/bin/npm install)
+```
+
+```
+Service management on production hosting:
+bash> ssh root@btresdias.org /etc/init.d/btdapp restart
+```
+
 ## User Stories for the BTD Rector Access Database Application
 
 ### I'm a rector developing my team list, I need to...

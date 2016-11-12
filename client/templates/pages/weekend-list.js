@@ -4,7 +4,7 @@ import { Weekends } from '/imports/weekends.js';
 
 Template.weekendList.helpers({
     weekends() {
-        let weekends = Weekends.find({}, {sort: {weekendNumber: 1}});
+        let weekends = Weekends.find({}, {sort: {weekendNumber: -1}});
         if (weekends) {
             return weekends;
         }

@@ -36,11 +36,21 @@ FlowRouter.route('/weekends/:gender/:weekendNumber', {
     triggersEnter: [isAuthenticated]
 });
 
-FlowRouter.route('/people/:subview?', {
+FlowRouter.route('/people', {
     name: 'Person.list',
     action() {
         BlazeLayout.render('layout', {
             routeTemplate: 'personList'
+        });
+    },
+    triggersEnter: [isAuthenticated]
+});
+
+FlowRouter.route('/experience/:roleTitle?', {
+    name: 'Experience',
+    action() {
+        BlazeLayout.render('layout', {
+            routeTemplate: 'experienceList'
         });
     },
     triggersEnter: [isAuthenticated]

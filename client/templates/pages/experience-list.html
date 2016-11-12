@@ -1,0 +1,42 @@
+<template name="experienceList">
+    <div class="row">
+        <div class="col s12">
+            <h4>Experience</h4>
+            <p>Find Pescadores by weekend experiences.</p>
+        </div>
+    </div>
+
+    <div class="row">
+    	<div class="input-field col s12">
+    		<select name="role">
+                <option value="" disabled selected>Select a role</option>
+                {{#each roleTitle in roles}}
+                    <option value="{{roleTitle}}">{{roleTitle}}</option>
+                {{/each}}
+            </select>
+    		<label>Role Select</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            {{#if people}}
+                <ul class="collection">
+                    {{#each person in people}}
+                        <li class="collection-item">
+                            <span class="right">
+                                Worked: {{person.workedCount}}
+                                {{#if person.headCount}}
+                                    , Head: {{person.headCount}}
+                                {{/if}}
+                            </span>
+                            <a href="/person/{{person._id}}">{{person.fullName}}</a>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <em>Please select a role.</em>
+            {{/if}}
+        </div>
+    </div>
+</template>

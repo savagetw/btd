@@ -31,7 +31,7 @@
                 {{#each attendee in team}}
                 <li class="collection-item">
                     <span class="right">
-                        {{ attendee.role.title }}
+                        <a href="/experience/{{ attendee.role.title }}">{{ attendee.role.title }}</a>
                         {{#if attendee.role.isHead }}<em>*</em>{{/if}}
                     </span>
                     <a href="/person/{{ attendee.person._id }}">{{ name(attendee.person) }}</a>

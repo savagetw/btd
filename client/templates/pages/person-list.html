@@ -1,8 +1,43 @@
 <template name="personList">
     <div class="row">
-        <a href="/people/by-name">By Name</a>
-        <a href="/people/by-role">By Role</a>
+        <div class="col s12">
+            <h4>People</h4>
+            <p>Find Pescadores by name or other contact details.</p>
+        </div>
     </div>
 
-    {{> Template.dynamic template=subview}}
+    <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            <input id="search" name="search" type="text" class="validate">
+            <label for="search">Find People</label>
+        </div>
+    </div>
+
+    {{#if searching}}
+        <li class="collection-item">
+            <div class="progress">
+                <div class="indeterminate"></div>
+            </div>
+        </li>
+    {{else}} 
+        {{#each people}}
+            <div class="row">
+                <div class="col s12">
+                    <div class="card darken-1 hoverable">
+                        <a href="/person/{{_id}}">
+                        <div class="card-content">
+                            <span class="secondary-content">{{candidateWeekend}}</span>
+                            <strong class="title">{{name}}</strong>
+                            <br>{{fullCity}}
+                            <br> {{email}} &mdash; {{phone}}
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {{else}}
+            <h3>We couldn't find anyone matching "{{query}}".</h3>
+        {{/each}}
+    {{/if}}
 </template>

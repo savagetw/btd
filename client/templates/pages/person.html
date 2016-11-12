@@ -75,6 +75,13 @@
         </div>
 
         <div class="row">
+            {{#if church}}
+            <div class="col s3">
+                <label>Church</label><br>
+                {{church}}
+            </div>
+            {{/if}}
+
             {{#if experiences.length}}
             <div class="col s3">
                 <label>Weekends Worked</label><br>

@@ -3,6 +3,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker'
 import { WeekendRoles } from '/imports/weekend-roles.js';
 import { People } from '/imports/people.js';
+import { GenderFilter } from '/imports/ui/gender-filter.js';
 import { _ } from 'lodash';
 
 Template.experienceList.helpers({
@@ -43,12 +44,16 @@ Template.experienceList.helpers({
         }
 
         return _.uniq(_.map(roles, 'title'));
+    },
+    genderFilterArgs() {
+        return GenderFilter.getFilterArgs(Template.instance().genderFilter);
     }
 });
 
 Template.experienceList.onCreated(function () {
     let template = this;
     template.selectedRoleTitle = new ReactiveVar();
+    template.genderFilter = new ReactiveVar();
     template.autorun(() => {
         template.subscribe('weekendRoles', function () {
             Tracker.afterFlush(function () {
@@ -58,7 +63,7 @@ Template.experienceList.onCreated(function () {
 
         let roleTitle = FlowRouter.getParam('roleTitle');
         if (roleTitle) {
-            template.subscribe('people', {});
+            template.subscribe('people', GenderFilter.people(template.genderFilter.get()));
             Template.instance().selectedRoleTitle.set(roleTitle);
         }
     });

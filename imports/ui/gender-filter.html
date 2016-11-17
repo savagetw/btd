@@ -1,0 +1,11 @@
+<template name="genderFilter">
+    <div class="row">
+        <div class="col s12">
+            <span class="gender-filter right">
+                {{#each gender in genders}}
+                    <button class="btn" id="{{ gender }}">{{ gender }}</button>
+                {{/each}}
+            </span>
+        </div>
+    </div>
+</template>

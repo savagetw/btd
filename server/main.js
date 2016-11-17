@@ -3,7 +3,7 @@ import { Weekends } from '/imports/weekends.js';
 import { WeekendRoles } from '/imports/weekend-roles.js';
 import { Meteor } from 'meteor/meteor';
 
-Meteor.publish('people-search', function (search) {
+Meteor.publish('people-search', function (search, genderFilter) {
     check(search, Match.OneOf(String, null, undefined));
 
     let query = {};
@@ -11,7 +11,7 @@ Meteor.publish('people-search', function (search) {
 
     if (search) {
         let words = search.split(' ');
-        let queries = [];
+        let queries = genderFilter ? [genderFilter] : [];
         words.forEach(function (word) {
             let regexStr = '';
             for (let i = 0, len = word.length; i < len; i++) {

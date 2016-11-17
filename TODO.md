@@ -16,8 +16,18 @@ Weekend Detail View:
 - [x] Group by job. Sort by group, then sort by head/not-head.
 - [ ] Show the Rector name in header
 
-Weekends View:
+Weekends List View:
 - [x] Sort descending by weekend number.
+- [x] Allow filtering by gender.
+
+People List/Search View:
+- [x] Allow filtering by gender.
+
+Experience List/Search View:
+- [x] Allow filtering by gender.
+
+Gender Filter:
+- [ ] Store gender filter in session to persist across route changes.
 
 Data cleanup tasks:
 - [ ] Assign rectors to weekends prior to #18?

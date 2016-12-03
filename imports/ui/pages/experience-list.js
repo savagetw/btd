@@ -3,8 +3,10 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker'
 import { WeekendRoles } from '/imports/weekend-roles.js';
 import { People } from '/imports/people.js';
-import { GenderFilter } from '/imports/ui/gender-filter.js';
+import { GenderFilter } from '/imports/ui/filters/gender-filter.js';
 import { _ } from 'lodash';
+
+import './experience-list.html';
 
 Template.experienceList.helpers({
     people() {

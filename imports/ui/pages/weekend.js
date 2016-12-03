@@ -8,6 +8,8 @@ import { People } from '/imports/people.js';
 
 import _ from 'lodash';
 
+import './weekend.html';
+
 Template.weekend.helpers({
     weekendTitle() {
         let weekend = Template.instance().weekend.get();

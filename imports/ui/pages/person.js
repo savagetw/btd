@@ -4,6 +4,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { People } from '/imports/people.js';
 
+import './person.html';
+
 Template.person.helpers({
     person() {
         let person = Template.instance().person.get();

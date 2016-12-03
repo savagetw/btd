@@ -1,7 +1,9 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Weekends } from '/imports/weekends.js';
-import { GenderFilter } from '/imports/ui/gender-filter.js';
+import { GenderFilter } from '/imports/ui/filters/gender-filter.js';
+
+import './weekend-list.html';
 
 Template.weekendList.helpers({
     weekends() {

@@ -1,8 +1,10 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { People } from '/imports/people.js';
-import { GenderFilter } from '/imports/ui/gender-filter.js';
+import { GenderFilter } from '/imports/ui/filters/gender-filter.js';
 import { _ } from 'lodash';
+
+import './person-list.html';
 
 Template.personList.helpers({
     people() {

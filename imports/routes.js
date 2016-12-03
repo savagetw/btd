@@ -1,11 +1,13 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
-import './templates/pages/home.html';
-import './templates/pages/weekend-list.html';
-import './templates/pages/weekend.html';
-import './templates/pages/person-list.html';
-import './templates/pages/not-found.html';
+import './ui/pages/home.js';
+import './ui/pages/weekend-list.js';
+import './ui/pages/weekend.js';
+import './ui/pages/person-list.js';
+import './ui/pages/person.js';
+import './ui/pages/experience-list.js';
+import './ui/pages/not-found.js';
 
 FlowRouter.route('/', {
     name: 'Main',

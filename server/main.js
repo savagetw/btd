@@ -23,7 +23,7 @@ Meteor.publish('people-search', function (search, genderFilter) {
             let regex = new RegExp(regexStr, 'i');
 
             let query = {$or: []};
-            ['firstName', 'preferredName', 'lastName', 'address.city'].forEach(function (field) {
+            ['firstName', 'preferredName', 'lastName', 'address.city', 'church'].forEach(function (field) {
                 let orQuery = {};
                 orQuery[field] = regex;
                 query.$or.push(orQuery);

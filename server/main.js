@@ -9,9 +9,9 @@ Meteor.publish('people-search', function (search, genderFilter) {
     let query = {};
     let projection = { limit: 10, sort: { lastName: 1, firstName: 1 } };
 
+    let queries = genderFilter ? [genderFilter] : [];
     if (search) {
         let words = search.split(' ');
-        let queries = genderFilter ? [genderFilter] : [];
         words.forEach(function (word) {
             let regexStr = '';
             for (let i = 0, len = word.length; i < len; i++) {
@@ -41,8 +41,8 @@ Meteor.publish('people-search', function (search, genderFilter) {
 
         let regex = new RegExp(search, 'i');
         projection.limit = 100;
-        query.$and = queries;
     }
+    query.$and = queries;
     return People.find(query, projection);
 });
 

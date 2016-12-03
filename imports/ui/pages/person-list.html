@@ -1,4 +1,6 @@
 <template name="personList">
+    {{>genderFilter genderFilterArgs}}
+
     <div class="row">
         <div class="col s12">
             <h4>People</h4>
@@ -13,8 +15,6 @@
             <label for="search">Find People</label>
         </div>
     </div>
-
-    {{>genderFilter genderFilterArgs}}
 
     {{#if searching}}
         <li class="collection-item">

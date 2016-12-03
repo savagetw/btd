@@ -1,4 +1,6 @@
 <template name="experienceList">
+    {{>genderFilter genderFilterArgs}}
+    
     <div class="row">
         <div class="col s12">
             <h4>Experience</h4>
@@ -18,7 +20,6 @@
         </div>
     </div>
 
-    {{>genderFilter genderFilterArgs}}
     <div class="row">
         <div class="col s12">
             {{#if people}}

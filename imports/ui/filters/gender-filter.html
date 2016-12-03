@@ -3,7 +3,7 @@
         <div class="col s12">
             <span class="gender-filter right">
                 {{#each gender in genders}}
-                    <button class="btn" id="{{ gender }}">{{ gender }}</button>
+                    <button class="btn {{selected(gender)}}" id="{{ gender }}">{{ gender }}</button>
                 {{/each}}
             </span>
         </div>

@@ -1,11 +1,13 @@
 <template name="weekendList">
+    {{>genderFilter genderFilterArgs}}
+
     <div class="row">
         <div class="col s12">
             <h4>Weekends</h4>
             <p>Browse the list of weekends to reveal their details, teams, and candidates.</p>
         </div>
     </div>
-    {{>genderFilter genderFilterArgs}}
+
     <div class="row">
         <div class="col s12">
             <ul class="collection">

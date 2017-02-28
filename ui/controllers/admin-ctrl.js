@@ -1,5 +1,5 @@
 define([], function () {
-    return ['$resource', function ($resource) {
+    return ['$resource', 'currentWeekendSvc', function ($resource, currentWeekend) {
         var Admin = $resource('/admin');
         let ctrl = this;
 
@@ -16,6 +16,8 @@ define([], function () {
             Admin.save({
                 command: 'weekend.setCurrent',
                 weekendNumber: ctrl.admin.meta.currentWeekendNumber
+            }).$promise.then(function () {
+                return currentWeekend.reloadWeekends();
             });
         };
     }];

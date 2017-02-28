@@ -4,7 +4,11 @@
 </h1>
 
 <div>
-    <button class="btn btn-primary">Add to Current Team</button>
+    <button 
+        class="btn btn-primary" 
+        ng-disabled="$ctrl.isAlreadyWorking"
+        ng-click="$ctrl.addToCurrentWeekend()"
+        >Add to Current Team</button>
     <button class="btn btn-default">Edit</button>
 </div>
 

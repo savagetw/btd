@@ -106,22 +106,42 @@ function Meta() {
 
 function People(id) {
     this.byId = function (_id) {
-        return __data['people'].find(function (person) {
+        return __data.people.find(function (person) {
             return person._id === _id;
         });
     };
 
     this.candidates = function (gender) {
-        return __data['people'].filter(function (person) {
+        return __data.people.filter(function (person) {
             return person.gender === gender && 
                 !person.candidateOn &&
                 person.status === 'candidate' && 
                 (!person.experiences || person.experiences.length === 0);
         });
     };
+
+    this.addExperience = function (person, weekend) {
+        let existing = person.experiences.find(function (experience) {
+            return experience.weekendNumber === weekend.weekendNumber && experience.weekendGender === weekend.gender;
+        });
+
+        if (existing) {
+            throw new Error('Experience already added.');
+        }
+
+        person.experiences.push(_.pick(weekend, ['weekendGender', 'weekendNumber']));
+    }
+}
+
+function matchesWeekend(haystack) {
+    return function (needle) {
+        
+    };
 }
 
 function Weekends(id) {
+    let weekends = this;
+
     let __currentWeekend = {
         male: undefined,
         female: undefined
@@ -131,22 +151,42 @@ function Weekends(id) {
         return getCurrentWeekend(gender);
     };
 
+    this.set = function (gender, weekend) {
+        __currentWeekend[gender] = weekend;
+    }
+
+    this.get = function (gender, weekendNumber) {
+        return __data.weekends.find(function (weekend) {
+            return weekend.gender === gender && weekend.weekendNumber === weekendNumber;
+        });
+    }
+
+    this.addAttendee = function (weekend, person) {
+        console.log('Adding person', person);
+        let existing = weekend.attendees.find(function (attendee) {
+            return attendee.person._id === person._id;
+        });
+
+        if (existing) {
+            throw new Error('Already attending.');
+        }
+
+        weekend.attendees.push(new Attendee(person));
+    };
+
     this.setCurrentWeekendNumber = function (weekendNumber) {
         __data['meta'].currentWeekendNumber = weekendNumber;
         console.log(`Changed the current weekend number to ${weekendNumber}`);
     };
 
     this.add = function (weekendNumber) {
-        __data['weekends'].push(new Weekend('male', weekendNumber));
-        __data['weekends'].push(new Weekend('female', weekendNumber));
+        __data.weekends.push(new Weekend('male', weekendNumber));
+        __data.weekends.push(new Weekend('female', weekendNumber));
         console.log(`Added both Male and Female weekends #${weekendNumber}`);
     };
 
     this.close = function (gender, weekendNumber) {
-        let weekend = __data['weekends'].find(function (weekend) {
-            return weekend.gender === gender && weekend.weekendNumber === weekendNumber;
-        });
-
+        let weekend = weekends.get(gender, weekendNumber);
         if (!weekend) {
             console.log(`Failed to find the ${gender} #${weekendNumber} weekend.`);
             return;
@@ -221,6 +261,15 @@ function Weekends(id) {
         this.gender = gender;
         this.weekendNumber = weekendNumber_;
         this.attendees = [];
+    }
+
+    function Attendee(person, role) {
+        return {
+            didAttend: false,
+            isConfirmed: false,
+            person: _.pick(person, ['_id', 'firstName', 'lastName', 'preferredName']),
+            role: role
+        }
     }
 }
 

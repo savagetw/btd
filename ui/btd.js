@@ -26,9 +26,22 @@ define([
     'controllers/pescadores-ctrl',
     'controllers/pescadore-ctrl',
     'controllers/candidates-ctrl',
-    'controllers/admin-ctrl'
-], function (ng, ngRoute, ngResource, satellizer, bootstrap, rootCtrl, weekendCtrl, pescadoresCtrl, pescadoreCtrl, candidatesCtrl, adminCtrl) {
-    console.log('Loaded!');
+    'controllers/admin-ctrl',
+    'services/current-weekend-svc'
+], function (
+    ng, 
+    ngRoute, 
+    ngResource, 
+    satellizer, 
+    bootstrap, 
+    rootCtrl, 
+    weekendCtrl, 
+    pescadoresCtrl, 
+    pescadoreCtrl, 
+    candidatesCtrl, 
+    adminCtrl,
+    currentWeekendSvc
+    ) {
     angular
         .module('btd', ['ngRoute', 'ngResource', 'satellizer', 'ui.bootstrap'])
         .controller('rootCtrl', rootCtrl)
@@ -37,6 +50,7 @@ define([
         .controller('pescadoreCtrl', pescadoreCtrl)
         .controller('candidatesCtrl', candidatesCtrl)
         .controller('adminCtrl', adminCtrl)
+        .service('currentWeekendSvc', currentWeekendSvc)
         .filter('name', function () {
             return function (person) {
                 if (person.preferredName) {

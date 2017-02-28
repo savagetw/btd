@@ -46,6 +46,24 @@ app.get('/weekend/:gender', function (req, res) {
     res.send(models.weekends.current(req.params.gender));
 });
 
+app.post('/weekend/:gender/:weekendNumber/attendee/:id', function (req, res) {
+    let person = models.people.byId(parseInt(req.params.id, 10));
+    if (!person) {
+        res.send(500, 'Person not found.');
+        return;
+    }
+
+    let weekend = models.weekends.get(req.params.gender, parseInt(req.params.weekendNumber, 10));
+    if (!weekend) {
+        res.send(500, 'Weekend not found.');
+        return;
+    }
+
+    models.weekends.addAttendee(weekend, person);
+    models.people.addExperience(person, weekend);
+    res.sendStatus(200);
+});
+
 app.get('/admin', function (req, res) {
     res.send({
         meta: models.meta.get(),

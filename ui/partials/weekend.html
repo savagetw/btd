@@ -1,0 +1,13 @@
+<h1>
+    Current Weekend
+</h1>
+
+<ul>
+    <li>Gender: {{$ctrl.weekend.gender}}</li>
+    <li>Weekend Number: {{$ctrl.weekend.weekendNumber}}</li>
+</ul>
+
+<h3>Attendees</h3>
+<ul ng-repeat="attendee in $ctrl.weekend.attendees">
+    <li><b>{{attendee.role.title}}</b> <a href="#!/pescadores/{{attendee.person._id}}">{{attendee.person | name}}</a></li>
+</ul>

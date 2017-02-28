@@ -1,0 +1,18 @@
+<div class="col-sm-4 col-sm-offset-4">
+    <h1>Administration</h1>
+    <hr>
+    <div class="row form-group">
+        <input type="text" ng-model="$ctrl.admin.meta.currentWeekendNumber">
+        <button ng-click="$ctrl.setCurrent()" class="btn btn-default">Set Current</button>
+        <div class="help-block">
+            Sets the current active weekend.
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <button ng-click="$ctrl.addWeekend()" class="btn btn-default">Add Weekend</button>
+        <div class="help-block">
+            Creates a new weekend to begin planning.
+        </div>
+    </div>
+</div>

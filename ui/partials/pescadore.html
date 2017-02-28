@@ -1,0 +1,15 @@
+<h1>
+    {{ $ctrl.person | name }}
+    <small>Pescadore</small>
+</h1>
+
+<div>
+    <button class="btn btn-primary">Add to Current Team</button>
+    <button class="btn btn-default">Edit</button>
+</div>
+
+<blockquote>
+    <pre>
+    {{$ctrl.person | json:4}}
+    </pre>
+</blockquote>

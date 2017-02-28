@@ -1,0 +1,6 @@
+{
+    "table_names": {
+        "male": ["Matthew", "Mark", "Luke", "John", "Peter", "James"],
+        "female": ["Rachel", "Rebekah", "Leah", "Ester"]
+    }
+}

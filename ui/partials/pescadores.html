@@ -1,0 +1,13 @@
+<h1>Pescadores</h1>
+<span>Browse members of the community which have been through a Tres Dias weekend.</span>
+
+<input ng-model="$ctrl.query" ng-change="$ctrl.changed($ctrl.query)" type="text" placeholder="Search">
+
+<div ng-if="$ctrl.people">
+    <h3>Results</h3>
+    <ul>
+        <li ng-repeat="person in $ctrl.people">
+            <a href="#!/pescadores/{{person._id}}">{{person | name}}</a>
+        </li>
+    </ul>
+</div>

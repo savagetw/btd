@@ -32,8 +32,8 @@ define([], function () {
             });
         };
 
-        this.addTeamMember = function (person) {
-            var weekend = weekends[person.gender];
+        this.addTeamMember = function (gender, person) {
+            var weekend = weekends[gender];
             return Attendee.save({
                 gender: weekend.gender,
                 weekendNumber: weekend.weekendNumber,

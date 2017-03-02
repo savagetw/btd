@@ -121,7 +121,8 @@ function People(id) {
     };
 
     this.addExperience = function (person, weekend) {
-        let existing = person.experiences.find(function (experience) {
+        person.experiences = person.experiences || [];
+        let existing = person.experiences && person.experiences.find(function (experience) {
             return experience.weekendNumber === weekend.weekendNumber && experience.weekendGender === weekend.gender;
         });
 
@@ -129,7 +130,10 @@ function People(id) {
             throw new Error('Experience already added.');
         }
 
-        person.experiences.push(_.pick(weekend, ['weekendGender', 'weekendNumber']));
+        person.experiences.push({
+            weekendGender: weekend.gender,
+            weekendNumber: weekend.weekendNumber
+        });
     }
 }
 

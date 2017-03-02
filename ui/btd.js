@@ -51,6 +51,18 @@ define([
         .controller('candidatesCtrl', candidatesCtrl)
         .controller('adminCtrl', adminCtrl)
         .service('currentWeekendSvc', currentWeekendSvc)
+        .constant('btdConstants', {
+            genders: {
+                male: {
+                    weekendLabel: 'Men\'s', 
+                    alternative: 'female'
+                },
+                female: {
+                    weekendLabel: 'Women\'s', 
+                    alternative: 'male'
+                }
+            }
+        })
         .filter('name', function () {
             return function (person) {
                 if (person.preferredName) {
@@ -59,6 +71,18 @@ define([
                 return `${person.firstName} ${person.lastName}`;
             };
         })
+        .filter('weekendGender', ['btdConstants', function(constants) {
+            return function (person, isAlternate) {
+                if (!person || !person.gender) {
+                    return 'Unknown';
+                }
+                let gender = constants.genders[person.gender];
+                if (isAlternate) {
+                    return constants.genders[gender.alternative].weekendLabel;
+                }
+                return gender.weekendLabel;
+            }
+        }])
         .config(function ($routeProvider, $locationProvider) {
             $routeProvider
                 .when('/login', {

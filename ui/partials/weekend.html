@@ -9,5 +9,9 @@
 
 <h3>Attendees</h3>
 <ul ng-repeat="attendee in $ctrl.weekend.attendees">
-    <li><b>{{attendee.role.title}}</b> <a href="#!/pescadores/{{attendee.person._id}}">{{attendee.person | name}}</a></li>
+    <li>
+        <b>{{attendee.role.title}}</b> 
+        <a href="#!/pescadores/{{attendee.person._id}}">{{attendee.person | name}}</a>
+        <a class="btn btn-default" ng-click="$ctrl.remove(attendee)">Remove</a>
+    </li>
 </ul>

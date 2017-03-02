@@ -1,5 +1,19 @@
 define([], function () {
     return ['$route', 'currentWeekendSvc', function ($route, currentWeekend) {
-        this.weekend = currentWeekend.get($route.current.params.gender);
+        
+        var $ctrl = this;
+        var gender = $route.current.params.gender;
+        $ctrl.remove = remove;
+        getWeekend(); 
+
+        function getWeekend() {
+            $ctrl.weekend = currentWeekend.get(gender);
+        }
+        
+        function remove(attendee) {
+            currentWeekend.remove(gender, attendee)
+                .then(currentWeekend.reloadWeekends)
+                .then(getWeekend);
+        }
     }];
 })

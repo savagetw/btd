@@ -135,6 +135,21 @@ function People(id) {
             weekendNumber: weekend.weekendNumber
         });
     }
+
+    this.removeExperience = function (person, weekend) {
+        if (!person.experiences) {
+            console.log(`${printPerson(person)} has no experiences to remove.`);
+            return;
+        }
+        for (let i = 0; i < person.experiences.length; i++) {
+            let experience = person.experiences[i];
+            if (experience.weekendNumber === weekend.weekendNumber && experience.weekendGender === weekend.gender) {
+                console.log(`Removing experience on ${printWeekend(weekend)} from ${printPerson(person)}`);
+                person.experiences.splice(i, 1);
+                return;
+            }
+        }
+    }
 }
 
 function matchesWeekend(haystack) {
@@ -166,17 +181,28 @@ function Weekends(id) {
     }
 
     this.addAttendee = function (weekend, person) {
-        console.log('Adding person', person);
         let existing = weekend.attendees.find(function (attendee) {
             return attendee.person._id === person._id;
         });
 
         if (existing) {
-            throw new Error('Already attending.');
+            throw new Error(`${printPerson(person)} already attending ${printWeekend(weekend)}`);
         }
 
+        console.log(`Adding person ${printPerson(person)}`);
         weekend.attendees.push(new Attendee(person));
     };
+
+    this.removeAttendee = function (weekend, person) {
+        for (let i = 0; i < weekend.attendees.length; i++) {
+            let attendee = weekend.attendees[i];
+            if (attendee.person._id === person._id) {
+                console.log(`Removing ${printPerson(person)} from ${printWeekend(weekend)}`)
+                weekend.attendees.splice(i, 1);
+                return;
+            } 
+        }
+    }
 
     this.setCurrentWeekendNumber = function (weekendNumber) {
         __data['meta'].currentWeekendNumber = weekendNumber;
@@ -283,4 +309,13 @@ function id() {
         __id = __data['meta'].currentId;
     }
     return ++__id;
+}
+
+function printWeekend(weekend) {
+    let label = weekend.gender === 'male' ? 'Men\'s' : 'Women\'s';
+    return `${label} #${weekend.weekendNumber} (${weekend._id})`;
+}
+
+function printPerson(person) {
+    return `${person.preferredName || person.firstName} ${person.lastName} (${person._id})`
 }

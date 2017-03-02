@@ -40,5 +40,14 @@ define([], function () {
                 personId: person._id}, {}).$promise
                 .then($svc.reloadWeekends);
         };
+
+        this.remove = function (gender, attendee) {
+            var weekend = weekends[gender];
+            return Attendee.delete({
+                gender: weekend.gender,
+                weekendNumber: weekend.weekendNumber,
+                personId: attendee.person._id
+            }).$promise.then($svc.reloadWeekends);
+        };
     }];
 })

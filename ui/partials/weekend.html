@@ -10,7 +10,12 @@
 <h3>Attendees</h3>
 <ul ng-repeat="attendee in $ctrl.weekend.attendees">
     <li>
-        <b>{{attendee.role.title}}</b> 
+        <select ng-hide="attendee.role.title === 'Candidate'"
+            ng-change="$ctrl.changeRole(attendee)"
+            ng-model="attendee.role"
+            ng-options="role as role.title for role in $ctrl.roles track by role._id">
+        </select>
+        <b ng-show="attendee.role.title === 'Candidate'">{{ attendee.role.title }}</b>
         <a href="#!/pescadores/{{attendee.person._id}}">{{attendee.person | name}}</a>
         <a class="btn btn-default" ng-click="$ctrl.remove(attendee)">Remove</a>
     </li>

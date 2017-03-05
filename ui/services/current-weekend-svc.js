@@ -32,12 +32,15 @@ define([], function () {
             });
         };
 
-        this.addTeamMember = function (gender, person) {
+        this.addTeamMember = function (gender, personId, roleId) {
             var weekend = weekends[gender];
-            return Attendee.save({
+            let params = {
                 gender: weekend.gender,
                 weekendNumber: weekend.weekendNumber,
-                personId: person._id}, {}).$promise
+                personId: personId
+            };
+            let payload = roleId ? {_id: roleId} : {};
+            return Attendee.save(params, payload).$promise
                 .then($svc.reloadWeekends);
         };
 

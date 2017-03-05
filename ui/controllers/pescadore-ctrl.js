@@ -45,7 +45,7 @@ define([], function () {
             }
 
             function addToCurrentWeekend(isAlternative) {
-                currentWeekend.addTeamMember(getGender(isAlternative), $ctrl.person)
+                currentWeekend.addTeamMember(getGender(isAlternative), $ctrl.person._id)
                     .then(function () {
                         load();
                     });

@@ -59,8 +59,9 @@ app.post('/weekend/:gender/:weekendNumber/attendee/:id', function (req, res) {
         return;
     }
 
-    models.weekends.addAttendee(weekend, person);
-    models.people.addExperience(person, weekend);
+    let role = models.roles.byId(parseInt(req.body._id, 10)) || {};
+    models.weekends.addAttendee(weekend, person, role);
+    models.people.addExperience(person, weekend, role);
     res.sendStatus(200);
 });
 
@@ -80,6 +81,10 @@ app.delete('/weekend/:gender/:weekendNumber/attendee/:id', function (req, res) {
     models.weekends.removeAttendee(weekend, person);
     models.people.removeExperience(person, weekend);
     res.sendStatus(200);
+});
+
+app.get('/roles', function (req, res) {
+    res.send(models.roles.get(req.query.assignable === 'true'));
 });
 
 app.get('/admin', function (req, res) {

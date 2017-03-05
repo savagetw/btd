@@ -26,6 +26,7 @@ module.exports = function (dataFile) {
         find: find,
         people: new People(id),
         weekends: new Weekends(id),
+        roles: new Roles(id),
         meta: new Meta()
     };
 };
@@ -120,19 +121,21 @@ function People(id) {
         });
     };
 
-    this.addExperience = function (person, weekend) {
+    this.addExperience = function (person, weekend, role) {
         person.experiences = person.experiences || [];
         let existing = person.experiences && person.experiences.find(function (experience) {
             return experience.weekendNumber === weekend.weekendNumber && experience.weekendGender === weekend.gender;
         });
 
         if (existing) {
-            throw new Error('Experience already added.');
+            existing.role = role;
+            return;
         }
 
         person.experiences.push({
             weekendGender: weekend.gender,
-            weekendNumber: weekend.weekendNumber
+            weekendNumber: weekend.weekendNumber,
+            role: role
         });
     }
 
@@ -152,9 +155,56 @@ function People(id) {
     }
 }
 
-function matchesWeekend(haystack) {
-    return function (needle) {
-        
+function Roles(id) {
+    let roles = this;
+
+    roles.byId = function (id) {
+        if (!id) {
+            return undefined;
+        }
+
+        return __data.roles.find(function (role) {
+            return role._id === id;
+        });
+    }
+
+    roles.get = function (forAssignment) {
+        if (!forAssignment) {
+            return __data.roles;
+        }
+
+        // Updates title labels to clearly label head positions
+        return _.sortBy(__data.roles.reduce(function (roles, role) {
+            let title = role.title;
+
+            if (matches(['Candidate'])) {
+                return roles;
+            }
+
+            if (matches(['Head', 'Rector', 'Rover'])) {
+                roles.push(_.pick(role, ['_id', 'title']));
+                return roles;
+            }
+
+            if (!role.isHead) {
+                roles.push(_.pick(role, ['_id', 'title']));
+                return roles;
+            }
+
+            if (title.indexOf('(Assistant)') !== -1) {
+                roles.push({_id: role._id, title: title.replace('Assistant', 'Assistant Head')});
+                return roles;
+            } 
+            
+            roles.push({_id: role._id, title: `${title} (Head)`});
+            return roles;
+
+            function matches(possibilities) {
+                return possibilities.reduce(function (isMatch, possibility) {
+                    return isMatch || title.indexOf(possibility) === 0;
+                }, false);
+            }
+        }, []), 'title');
     };
 }
 
@@ -180,13 +230,14 @@ function Weekends(id) {
         });
     }
 
-    this.addAttendee = function (weekend, person) {
+    this.addAttendee = function (weekend, person, role) {
         let existing = weekend.attendees.find(function (attendee) {
             return attendee.person._id === person._id;
         });
 
         if (existing) {
-            throw new Error(`${printPerson(person)} already attending ${printWeekend(weekend)}`);
+            existing.role = role;
+            return;
         }
 
         console.log(`Adding person ${printPerson(person)}`);
@@ -318,4 +369,8 @@ function printWeekend(weekend) {
 
 function printPerson(person) {
     return `${person.preferredName || person.firstName} ${person.lastName} (${person._id})`
+}
+
+function hasAny(src, toFind) {
+    return _.intersection(toFind, src).length !== 0;
 }

@@ -1,6 +1,7 @@
 'use strict';
 
 let express = require('express');
+let session = require('express-session')
 let app = express();
 let bodyParser = require('body-parser');
 let url = require('url');
@@ -11,10 +12,39 @@ let models = require('./models')(dataFile);
 
 app.use('/', express.static('ui'));
 
-app.use(bodyParser.json())
+app.use(session({
+  secret: '--btd-session--',
+  resave: false,
+  saveUninitialized: true
+}));
 
-app.get('/hello', function (req, res) {
-    res.send('Hello World!')
+app.use(function (req, res, next) {
+    if (req.url === '/auth' && req.method === 'POST') {
+        return next();
+    }
+
+    if (req.session && req.session.authenticated) {
+        // Client check to determine if still authenticated
+        if (req.url === '/auth' && req.method === 'GET') {
+            res.send('ok');
+            return;
+        }
+        return next();
+    }
+ 
+    res.sendStatus(403);
+});
+
+app.use(bodyParser.json());
+
+app.post('/auth', function (req, res) {
+    if (req.body && req.body.username === 'btd' && req.body.password === 'btd') {
+        req.session.authenticated = true;
+        res.send('Access granted.');
+        return;
+    }
+
+    res.status(403).send('Access denied.');
 });
 
 app.get('/people', function (req, res) {
@@ -32,13 +62,6 @@ app.get('/people/:_id', function (req, res) {
 app.get('/candidates/:gender', function (req, res) {
     console.log('Here we go');
     res.send(models.people.candidates(req.params.gender));
-});
-
-app.post('/auth/login', function (req, res) {
-    console.log(`Was given`);
-    console.log(req.body);
-    models.set('people', 'thom', req.body);
-    res.send('oh yeah');
 });
 
 app.get('/weekend/:gender', function (req, res) {

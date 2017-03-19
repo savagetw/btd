@@ -27,6 +27,7 @@ define([
     'controllers/pescadore-ctrl',
     'controllers/candidates-ctrl',
     'controllers/admin-ctrl',
+    'services/auth-svc',
     'services/current-weekend-svc'
 ], function (
     ng, 
@@ -40,6 +41,7 @@ define([
     pescadoreCtrl, 
     candidatesCtrl, 
     adminCtrl,
+    authSvc,
     currentWeekendSvc
     ) {
     angular
@@ -50,6 +52,7 @@ define([
         .controller('pescadoreCtrl', pescadoreCtrl)
         .controller('candidatesCtrl', candidatesCtrl)
         .controller('adminCtrl', adminCtrl)
+        .service('authSvc', authSvc)
         .service('currentWeekendSvc', currentWeekendSvc)
         .constant('btdConstants', {
             genders: {
@@ -88,34 +91,44 @@ define([
                 .when('/login', {
                     templateUrl: '/partials/login.html'
                 })
-                .when('/admin', {
+                .when('/admin', secure({
                     templateUrl: '/partials/admin.html',
                     controller: 'adminCtrl',
                     controllerAs: '$ctrl'
-                })
-                .when('/weekend/:gender', {
+                }))
+                .when('/weekend/:gender', secure({
                     templateUrl: '/partials/weekend.html',
                     controller: 'weekendCtrl',
                     controllerAs: '$ctrl'
-                })
-                .when('/pescadores', {
+                }))
+                .when('/pescadores', secure({
                     templateUrl: '/partials/pescadores.html',
                     controller: 'pescadoresCtrl',
                     controllerAs: '$ctrl'
-                })
-                .when('/pescadores/:_id', {
+                }))
+                .when('/pescadores/:_id', secure({
                     templateUrl: '/partials/pescadore.html',
                     controller: 'pescadoreCtrl',
                     controllerAs: '$ctrl'
-                })
-                .when('/candidates/:gender', {
+                }))
+                .when('/candidates/:gender', secure({
                     templateUrl: '/partials/candidates.html',
                     controller: 'candidatesCtrl',
                     controllerAs: '$ctrl'
-                })
+                }))
                 .otherwise({
                     templateUrl: '/partials/home.html'
-                })
+                });
+
+            function secure(route) {
+                return angular.extend({}, route, {
+                    resolveRedirectTo: ['authSvc', function (authSvc) {
+                        if (!authSvc.isAuthenticated()) {
+                            return '/login';
+                        }
+                    }]
+                });
+            }
         });
     angular.bootstrap(document, ['btd']);
 });

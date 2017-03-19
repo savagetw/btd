@@ -2,6 +2,6 @@
     <div class="form">
         <input ng-model="user.email" type="text"><br>
         <input ng-model="user.password" type="password"><br>
-        <button ng-click="login({user: 'thom', pass: 'something'})">Login</button>
+        <button ng-click="login(user.email, user.password)">Login</button>
     </div>
 </div>

@@ -16,7 +16,7 @@
             ng-options="role as role.title for role in $ctrl.roles track by role._id">
         </select>
         <b ng-show="attendee.role.title === 'Candidate'">{{ attendee.role.title }}</b>
-        <a href="#!/pescadores/{{attendee.person._id}}">{{attendee.person | name}}</a>
+        <a href="#!/pescadores/{{attendee.person._id}}">{{attendee.person | pescadoreName}}</a>
         <a class="btn btn-default" ng-click="$ctrl.remove(attendee)">Remove</a>
     </li>
 </ul>

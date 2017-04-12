@@ -27,6 +27,7 @@ define([
     'controllers/pescadore-ctrl',
     'controllers/candidates-ctrl',
     'controllers/admin-ctrl',
+    'filters/pescadore-filters',
     'services/auth-svc',
     'services/current-weekend-svc'
 ], function (
@@ -41,10 +42,12 @@ define([
     pescadoreCtrl, 
     candidatesCtrl, 
     adminCtrl,
+    pescadoreFilters,
     authSvc,
     currentWeekendSvc
     ) {
-    angular
+    
+    var btd = angular
         .module('btd', ['ngRoute', 'ngResource', 'satellizer', 'ui.bootstrap'])
         .controller('rootCtrl', rootCtrl)
         .controller('weekendCtrl', weekendCtrl)
@@ -65,14 +68,6 @@ define([
                     alternative: 'male'
                 }
             }
-        })
-        .filter('name', function () {
-            return function (person) {
-                if (person.preferredName) {
-                    return `${person.preferredName} ${person.lastName}`;
-                }
-                return `${person.firstName} ${person.lastName}`;
-            };
         })
         .filter('weekendGender', ['btdConstants', function(constants) {
             return function (person, isAlternate) {
@@ -130,5 +125,10 @@ define([
                 });
             }
         });
+
+    pescadoreFilters.forEach(function (pescadoreFilter) {
+        btd.filter(pescadoreFilter.name, pescadoreFilter.filter);
+    });
+
     angular.bootstrap(document, ['btd']);
 });

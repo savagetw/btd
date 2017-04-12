@@ -1,5 +1,5 @@
 <h1>
-    {{ $ctrl.person | name }}
+    {{ $ctrl.person | pescadoreName }}
     <small>Pescadore</small>
 </h1>
 
@@ -17,8 +17,105 @@
     <button class="btn btn-default">Edit</button>
 </div>
 
+<div class="person-details">
+    <div class="row">
+        <div class="col-sm-3">
+            <label>Full name</label><br> 
+            <span>{{$ctrl.person | pescadoreName:true}}</span>
+        </div>
+
+        <div class="col-sm-3" ng-show="$ctrl.person.candidateOn">
+            <label>Candidate On</label><br>
+            <span>{{$ctrl.person.candidateOn}}</span>
+        </div>
+
+        <div class="col-sm-3" ng-show="$ctrl.person.candidateOn && $ctrl.person.table">
+            <label>Table Of</label><br>
+            <span>{{$ctrl.person.table}}</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3" ng-show="$ctrl.person.status">
+            <label>Status</label><br>
+            {{$ctrl.person.status}}
+        </div>
+
+        <div class="col-sm-3" ng-show="$ctrl.person.sponsor">
+            <label>Sponsor</label><br>
+            <a href="#!/pescadores/{{$ctrl.person.sponsor._id}}">{{$ctrl.person.sponsor | pescadoreName}}</a>
+        </div>
+
+        <div class="col-sm-3" ng-show="$ctrl.person.spouse">
+            <label>Spouse</label><br>
+            <a href="#!/pescadores/{{$ctrl.person.spouse._id}}">{{$ctrl.person.spouse | pescadoreName}}</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <label>Email</label><br>
+            {{$ctrl.person | pescadoreEmail}}
+        </div>
+        <div class="col-sm-3">
+            <label>Address</label><br>
+            {{$ctrl.person.addressLabel}}
+        </div>
+
+        <div class="col-sm-3">
+            <label>Phone</label><br>
+            {{$ctrl.person.phoneList}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <label>Church</label><br>
+            {{$ctrl.person.church}}
+        </div>
+
+        <div class="col-sm-3">
+            <label>Weekends Worked</label><br>
+            {{$ctrl.person.experiences.length || '0'}}
+        </div>
+
+        <div class="col-sm-3">
+            <label>Candidates Sponsored</label><br>
+            {{$ctrl.person.sponsored || '0'}}
+        </div>
+
+        <div class="col-sm-3"></div>
+    </div>
+
+    <div class="person-experience">
+        <h4>Team Experiences</h4>
+        <div ng-show="$ctrl.groupedExperiences">
+            <ul class="collection">
+                <li class="collection-item" ng-repeat="roleTitle in $ctrl.groupedExperiences">
+                    {{roleTitle}}
+                    &mdash; 
+                    <a ui-sref="unclear">Weekend Link {{ roleTitle}}</a>
+                </li>
+            </ul>
+            <sub class="right">*denotes position served as head.</sub>
+        </div>
+
+        <em ng-hide="$ctrl.groupedExperiences">This pescadore has no recorded team experiences.</em>
+    </div>
+
+    <div class="person-experience">
+        <h4>Sponsored</h4>
+        <ul class="collection" ng-show="$ctrl.candidatesSponsored">
+            <li class="collection-item" ng-repeat="sponsoredPerson in $ctrl.candidatesSponsored">
+                <a ui-sref="/person/{{sponsoredPerson._id}}">{{$ctrl.person.sponsoredPerson.name}}</a>
+                &mdash; {{sponsoredPerson.candidateWeekend}}
+            </li>
+        </ul>
+        
+        <em ng-hide="$ctrl.candidatesSponsored">This pescadore has not sponsored any other candidates.</em>
+    </div>
+</div>
+
 <blockquote>
-    <pre>
-    {{$ctrl.person | json:4}}
-    </pre>
+    <pre>{{ $ctrl.person | json:4 }}</pre>
 </blockquote>

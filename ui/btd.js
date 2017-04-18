@@ -118,9 +118,9 @@ define([
             function secure(route) {
                 return angular.extend({}, route, {
                     resolveRedirectTo: ['authSvc', function (authSvc) {
-                        if (!authSvc.isAuthenticated()) {
+                        return authSvc.verifyAuthentication().catch(function () {
                             return '/login';
-                        }
+                        });
                     }]
                 });
             }

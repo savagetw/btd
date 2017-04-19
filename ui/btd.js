@@ -22,7 +22,8 @@ define([
     'satellizer',
     'bootstrap',
     'controllers/root-ctrl',
-    'controllers/weekend-ctrl',
+    'controllers/weekend-edit-ctrl',
+    'controllers/weekends-ctrl',
     'controllers/pescadores-ctrl',
     'controllers/pescadore-ctrl',
     'controllers/candidates-ctrl',
@@ -37,7 +38,8 @@ define([
     satellizer, 
     bootstrap, 
     rootCtrl, 
-    weekendCtrl, 
+    weekendEditCtrl, 
+    weekendsCtrl, 
     pescadoresCtrl, 
     pescadoreCtrl, 
     candidatesCtrl, 
@@ -50,7 +52,8 @@ define([
     var btd = angular
         .module('btd', ['ngRoute', 'ngResource', 'satellizer', 'ui.bootstrap'])
         .controller('rootCtrl', rootCtrl)
-        .controller('weekendCtrl', weekendCtrl)
+        .controller('weekendEditCtrl', weekendEditCtrl)
+        .controller('weekendsCtrl', weekendsCtrl)
         .controller('pescadoresCtrl', pescadoresCtrl)
         .controller('pescadoreCtrl', pescadoreCtrl)
         .controller('candidatesCtrl', candidatesCtrl)
@@ -92,8 +95,13 @@ define([
                     controllerAs: '$ctrl'
                 }))
                 .when('/weekend/:gender', secure({
-                    templateUrl: '/partials/weekend.html',
-                    controller: 'weekendCtrl',
+                    templateUrl: '/partials/weekends.html',
+                    controller: 'weekendsCtrl',
+                    controllerAs: '$ctrl'
+                }))
+                .when('/weekend/:gender/:weekendNumber', secure({
+                    templateUrl: '/partials/weekend-edit.html',
+                    controller: 'weekendEditCtrl',
                     controllerAs: '$ctrl'
                 }))
                 .when('/pescadores', secure({

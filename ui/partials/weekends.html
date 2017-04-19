@@ -1,0 +1,9 @@
+<h1>{{$ctrl.gender}} Weekends</h1>
+
+<ul>
+    <li ng-repeat="weekend in $ctrl.weekends | orderBy:'weekendNumber':true">
+        <a href="#!/weekend/{{weekend.gender}}/{{weekend.weekendNumber}}">
+            #{{weekend.weekendNumber}} <b ng-show="weekend.rector">Rector: {{weekend.rector | pescadoreName}}</b>
+        </a>
+    </li>
+</ul>

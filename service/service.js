@@ -65,8 +65,11 @@ app.get('/candidates/:gender', function (req, res) {
 });
 
 app.get('/weekend/:gender', function (req, res) {
-    console.log('Hit weekend/:gender');
-    res.send(models.weekends.current(req.params.gender));
+    res.send(models.weekends.list(req.params.gender));
+});
+
+app.get('/weekend/:gender/:weekendNumber', function (req, res) {
+    res.send(models.weekends.get(req.params.gender, parseInt(req.params.weekendNumber, 10)));
 });
 
 app.post('/weekend/:gender/:weekendNumber/attendee/:id', function (req, res) {

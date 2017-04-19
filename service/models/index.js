@@ -131,7 +131,7 @@ function People(id) {
             existing.role = role;
             return;
         }
-
+   
         person.experiences.push({
             weekendGender: weekend.gender,
             weekendNumber: weekend.weekendNumber,
@@ -228,6 +228,44 @@ function Weekends(id) {
         return __data.weekends.find(function (weekend) {
             return weekend.gender === gender && weekend.weekendNumber === weekendNumber;
         });
+    }
+
+    this.list = function (gender) {
+        return __data.weekends.reduce(function (weekends, weekend) {
+            maybeAssignRector(weekend);
+
+            let simpleWeekend = {
+                gender: weekend.gender,
+                weekendNumber: weekend.weekendNumber,
+                rector: weekend.rector
+            };
+
+            if (!gender) {
+                weekends[weekend.gender].push(simpleWeekend);
+            } else if (gender === simpleWeekend.gender) {
+                weekends.push(simpleWeekend);
+            }
+            
+            return weekends;
+        }, gender ? [] : {male: [], female: []});
+    }
+
+    function maybeAssignRector(weekend) {
+        if (weekend.rector !== undefined) {
+            return;
+        }
+
+        for (let i = 0; i < weekend.attendees.length; i++) {
+            let attendee = weekend.attendees[i];
+            if (attendee.role && attendee.role.title && attendee.role.title.toLowerCase() === 'rector') {
+                weekend.rector = attendee.person;
+                break;
+            }
+        }
+
+        if (weekend.rector === undefined) {
+            weekend.rector = null;
+        }
     }
 
     this.addAttendee = function (weekend, person, role) {

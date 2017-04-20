@@ -24,6 +24,16 @@ define([], function () {
             function load() {
                 $ctrl.person = Person.get($route.current.params);
                 $ctrl.person.$promise.then(function (person) {
+                    if (person.experiences) {
+                        person.groupedExperiences = person.experiences.reduce(function (groupedBy, experience) {
+                            var role = experience.role.title;
+                            groupedBy[role] = groupedBy[role] || [];
+                            groupedBy[role].push(experience);
+                            return groupedBy;
+                        }, {});
+                    }
+
+                    // Show "add to team" buttons for either gender weekend
                     currentWeekend.isTeamMember(person.gender, person._id)
                         .then(function (isAlreadyWorking) {
                             working[person.gender] = isAlreadyWorking;

@@ -75,7 +75,7 @@
         </div>
 
         <div class="col-sm-3">
-            <label>Weekends Worked</label><br>
+            <label>Recorded Weekends Worked</label><br>
             {{$ctrl.person.experiences.length || '0'}}
         </div>
 
@@ -89,18 +89,20 @@
 
     <div class="person-experience">
         <h4>Team Experiences</h4>
-        <div ng-show="$ctrl.groupedExperiences">
+        <div ng-show="$ctrl.person.groupedExperiences">
             <ul class="collection">
-                <li class="collection-item" ng-repeat="roleTitle in $ctrl.groupedExperiences">
-                    {{roleTitle}}
+                <li class="collection-item" ng-repeat="(role, experiences) in $ctrl.person.groupedExperiences">
+                    {{role}}
                     &mdash; 
-                    <a ui-sref="unclear">Weekend Link {{ roleTitle}}</a>
+                    <a href="#!/weekend/{{experience.weekendGender}}/{{experience.weekendNumber}}" ng-repeat="experience in experiences">
+                        {{experience.weekendGender}} #{{experience.weekendNumber}}
+                        <span class="glyphicon glyphicon-star" ng-show="experience.role.isHead">
+                    </a>
                 </li>
             </ul>
-            <sub class="right">*denotes position served as head.</sub>
         </div>
 
-        <em ng-hide="$ctrl.groupedExperiences">This pescadore has no recorded team experiences.</em>
+        <em ng-hide="$ctrl.person.groupedExperiences">This pescadore has no recorded team experiences.</em>
     </div>
 
     <div class="person-experience">

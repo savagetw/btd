@@ -1,9 +1,15 @@
 <h1>Pescadores</h1>
-<span>Browse members of the community which have been through a Tres Dias weekend.</span>
+<div>Browse members of the community which have been through a Tres Dias weekend.</div>
+<br>
+<label class="sr-only" for="inlineFormInputGroup">Username</label>
+<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+    <div class="input-group-addon">
+        <span class="glyphicon glyphicon-search"></span>
+    </div>
+    <input ng-model="$ctrl.query" ng-change="$ctrl.changed($ctrl.query)" type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search...">
+</div>
 
-<input ng-model="$ctrl.query" ng-change="$ctrl.changed($ctrl.query)" type="text" placeholder="Search">
-
-<div ng-if="$ctrl.people">
+<div ng-if="$ctrl.people.length">
     <h3>Results</h3>
     <ul>
         <li ng-repeat="person in $ctrl.people">

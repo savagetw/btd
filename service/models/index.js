@@ -64,7 +64,11 @@ function set(collection, key, value) {
 }
 
 function get(collection, key) {
-    return __data[collection][key];
+    if (key) {
+        return __data[collection][key];
+    } else {
+        return __data[collection];
+    }
 }
 
 function find(collection, search) {
@@ -72,7 +76,6 @@ function find(collection, search) {
 
     let hits = __data[collection];
     for(let i = 0; i < components.length; i++) {
-        console.log(`Search[${i}]: ${components[i]} of ${hits.length}`);
         if (!hits.length) {
             break;
         }
@@ -152,6 +155,14 @@ function People(id) {
                 return;
             }
         }
+    }
+
+    this.sponsoredBy = function (sponsorId) {
+        return __data.people.filter(function (person) {
+            return person.sponsor && person.sponsor._id === sponsorId;
+        }).map(function (person) {
+            return _.pick(person, ['firstName', 'preferredName', 'lastName', 'candidateOn', 'gender', '_id']);
+        });
     }
 }
 

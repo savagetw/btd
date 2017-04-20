@@ -2,7 +2,7 @@ define([], function () {
     return [
         {name: 'pescadoreName', filter: pescadoreName},
         {name: 'pescadoreEmail', filter: pescadoreEmail},
-        {name: 'pescadorePhone', filter: pescadorePhone},
+        {name: 'pescadorePhone', filter: pescadorePhone}
     ];
 });
 
@@ -31,9 +31,14 @@ function pescadoreEmail() {
 }
 
 function pescadorePhone() {
-    return function (person) {
-        person = person || {};
-        return findPreferred(person.phoneNumbers, 'digits') || 'Unknown phone';
+    return function (phoneNumber) {
+        if (phoneNumber.length !== 10) {
+            return phoneNumber;
+        }
+        var i = 0;
+        return ['(',0,0,0,')',' ',0,0,0,'-',0,0,0,0].map(function (elem) {
+            return elem || phoneNumber[i++];
+        }).join('');
     };
 }
 
@@ -43,5 +48,6 @@ function findPreferred(list, fieldName) {
         if (item.isPreferred) {
             return item[fieldName];
         }
+        return preferred;
     }, undefined);
 }

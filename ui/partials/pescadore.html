@@ -26,7 +26,9 @@
 
         <div class="col-sm-3" ng-show="$ctrl.person.candidateOn">
             <label>Candidate On</label><br>
-            <span>{{$ctrl.person.candidateOn}}</span>
+            <a href="#!/weekend/{{$ctrl.person.gender}}/{{$ctrl.person.candidateOn}}">
+                {{$ctrl.person.gender}} #{{$ctrl.person.candidateOn}}
+            </a>
         </div>
 
         <div class="col-sm-3" ng-show="$ctrl.person.candidateOn && $ctrl.person.table">
@@ -59,12 +61,17 @@
         </div>
         <div class="col-sm-3">
             <label>Address</label><br>
-            {{$ctrl.person.addressLabel}}
+            <div ng-repeat="line in $ctrl.person.addressLines">{{line}}</div>
         </div>
 
         <div class="col-sm-3">
             <label>Phone</label><br>
-            {{$ctrl.person.phoneList}}
+            <div ng-repeat="phone in $ctrl.person.phoneNumbers">
+                {{phone.digits | pescadorePhone}} 
+                <span class="glyphicon glyphicon-phone" ng-show="phone.label === 'cell'"></span>
+                <span class="glyphicon glyphicon-earphone" ng-show="phone.label !== 'cell'"></span>
+                <span class="glyphicon glyphicon-star" ng-show="phone.isPreferred"></span>
+            </div>
         </div>
     </div>
 
@@ -81,7 +88,7 @@
 
         <div class="col-sm-3">
             <label>Candidates Sponsored</label><br>
-            {{$ctrl.person.sponsored || '0'}}
+            {{$ctrl.person.candidatesSponsored.length || '0'}}
         </div>
 
         <div class="col-sm-3"></div>
@@ -107,17 +114,16 @@
 
     <div class="person-experience">
         <h4>Sponsored</h4>
-        <ul class="collection" ng-show="$ctrl.candidatesSponsored">
-            <li class="collection-item" ng-repeat="sponsoredPerson in $ctrl.candidatesSponsored">
-                <a ui-sref="/person/{{sponsoredPerson._id}}">{{$ctrl.person.sponsoredPerson.name}}</a>
-                &mdash; {{sponsoredPerson.candidateWeekend}}
+        <ul class="collection" ng-show="$ctrl.person.candidatesSponsored">
+            <li class="collection-item" ng-repeat="sponsoredPerson in $ctrl.person.candidatesSponsored">
+                <a href="#!/pescadores/{{sponsoredPerson._id}}">{{sponsoredPerson | pescadoreName}}</a>
+                &mdash; 
+                <a href="#!/weekend/{{sponsoredPerson.gender}}/{{sponsoredPerson.candidateOn}}">
+                    {{sponsoredPerson.gender}} #{{sponsoredPerson.candidateOn}}
+                </a>
             </li>
         </ul>
         
-        <em ng-hide="$ctrl.candidatesSponsored">This pescadore has not sponsored any other candidates.</em>
+        <em ng-hide="$ctrl.person.candidatesSponsored">This pescadore has not sponsored any other candidates.</em>
     </div>
 </div>
-
-<blockquote>
-    <pre>{{ $ctrl.person | json:4 }}</pre>
-</blockquote>

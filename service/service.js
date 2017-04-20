@@ -48,7 +48,13 @@ app.post('/auth', function (req, res) {
 });
 
 app.get('/people', function (req, res) {
-    res.send(models.find('people', req.query.q));
+    if (req.query.q) {
+        res.send(models.find('people', req.query.q));
+    } else if (req.query.sponsoredBy) {
+        res.send(models.people.sponsoredBy(parseInt(req.query.sponsoredBy, 10)));
+    } else {
+        res.send(models.get('people'));
+    }
 });
 
 app.get('/people/:_id', function (req, res) {

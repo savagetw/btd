@@ -44,7 +44,22 @@ define([], function () {
                         .then(function (isAlreadyWorking) {
                             working[alternativeGender] = isAlreadyWorking;
                         });
+
+                    person.candidatesSponsored = Person.query({sponsoredBy: person._id});
+
+                    assignPrintableAddress(person);
                 });
+            }
+
+            function assignPrintableAddress(person) {
+                if (!person.address || !person.address.city || !person.address.state) {
+                    person.addressLines = ['Unknown'];
+                }
+                let fullCity = person.address.city + ', ' + person.address.state;
+                if (!person.address.street || !person.address.zip) {
+                    person.addressLines = [fullCity];
+                }
+                return person.addressLines = [person.address.street, fullCity + ' ' + person.address.zip];
             }
 
             function isAlreadyWorking(isAlternative) {

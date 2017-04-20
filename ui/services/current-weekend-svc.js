@@ -8,7 +8,7 @@ define([], function () {
         
         this.reloadWeekends = function () {
             ['male', 'female'].forEach(function (gender) {
-                weekends[gender] = Weekend.get({gender: gender});
+                weekends[gender] = Weekend.get({gender: gender, current: true});
             });
         };
 

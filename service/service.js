@@ -65,7 +65,11 @@ app.get('/candidates/:gender', function (req, res) {
 });
 
 app.get('/weekend/:gender', function (req, res) {
-    res.send(models.weekends.list(req.params.gender));
+    if (req.query.current === 'true') {
+        res.send(models.weekends.current(req.params.gender));
+    } else {
+        res.send(models.weekends.list(req.params.gender));
+    }
 });
 
 app.get('/weekend/:gender/:weekendNumber', function (req, res) {

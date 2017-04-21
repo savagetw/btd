@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <h1>Experiences</h1>
+    </div>
+
+    <div class="row">
+        <label class="sr-only" for="inlineFormInputGroup">Role</label>
+        <div class="input-group col-xs-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-user"></span>
+            </div>
+            <select class="form-control"
+                ng-model="$ctrl.role" 
+                ng-change="$ctrl.getExperiences()" 
+                ng-options="role.title for role in $ctrl.roles | orderBy:'title'"></select>
+        </div>
+        <span>Browse weekend roles to discover where pescadores have served on previous weekends.</span>
+    </div>
+
+<div ng-show="$ctrl.role">
+    <div ng-show="$ctrl.people.length">
+        <h3>Pescadores with {{$ctrl.role.title}} Experience</h3>
+        <ul>
+            <li ng-repeat="person in $ctrl.people">
+                <a href="#!/pescadores/{{person._id}}">{{person | pescadoreName}}</a>
+                &mdash;
+                <a href="#!/weekend/{{experience.weekendGender}}/{{experience.weekendNumber}}" ng-repeat="experience in person.experiences">
+                    {{experience.weekendGender}} #{{experience.weekendNumber}}
+                    <span class="glyphicon glyphicon-star" ng-show="experience.role.isHead">
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div ng-show="!$ctrl.people.length">
+        <em>No pescadores found with the selected experience.</em>
+    </div>
+
+</div>
+</div>

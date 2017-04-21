@@ -157,6 +157,30 @@ function People(id) {
         }
     }
 
+    this.withExperience = function (roleId) {
+        return __data.people.reduce(function (peopleWithExperiences, person) {
+            if (!person.experiences) {
+                return peopleWithExperiences;
+            }
+
+            var roleExperiences = person.experiences.filter(function (experience) {
+                return experience.role && experience.role._id === roleId;
+            });
+
+            if (!roleExperiences.length) {
+                return peopleWithExperiences;
+            }
+
+            return peopleWithExperiences.concat({
+                _id: person._id,
+                firstName: person.firstName,
+                preferredName: person.preferredName,
+                lastName: person.lastName,
+                experiences: roleExperiences
+            });
+        }, []);
+    };
+
     this.sponsoredBy = function (sponsorId) {
         return __data.people.filter(function (person) {
             return person.sponsor && person.sponsor._id === sponsorId;

@@ -65,6 +65,10 @@ app.get('/people/:_id', function (req, res) {
     res.sendStatus(404);
 });
 
+app.get('/people/experiences/:_id', function (req, res) {
+    res.send(models.people.withExperience(parseInt(req.params._id, 10)));
+});
+
 app.get('/candidates/:gender', function (req, res) {
     console.log('Here we go');
     res.send(models.people.candidates(req.params.gender));

@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="row">
+        <h1>Experience: {{$ctrl.role.title}}</h1>
+    </div>
+
+    <div ng-repeat="person in $ctrl.experiences">
+        <a href="#!/pescadores/{{person._id}}">{{person | pescadoreName}}</a>
+    </div>
+
+</div>

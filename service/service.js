@@ -127,6 +127,10 @@ app.get('/roles', function (req, res) {
     res.send(models.roles.get(req.query.assignable === 'true'));
 });
 
+app.get('/roles/:id', function (req, res) {
+    res.send(models.roles.byId(parseInt(req.params.id, 10)));
+});
+
 app.get('/admin', function (req, res) {
     res.send({
         meta: models.meta.get(),

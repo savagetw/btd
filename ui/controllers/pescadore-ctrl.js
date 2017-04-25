@@ -14,7 +14,7 @@ define([], function () {
             $ctrl.isAlreadyWorking = isAlreadyWorking;
             $ctrl.addToCurrentWeekend = addToCurrentWeekend;
 
-            let Person = $resource('/people/:_id');
+            let Person = $resource('/people/:id');
             let working = {
                 male: true,
                 female: true

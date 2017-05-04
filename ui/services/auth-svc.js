@@ -27,7 +27,7 @@ define([], function () {
         function login(username, password) {
             return Auth.save({}, {
                 username: username,
-                password: password
+                password: btoa(password)
             }).$promise.then(verifyAuthentication);
         };
 

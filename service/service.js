@@ -38,8 +38,9 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 
 app.post('/auth', function (req, res) {
-    if (req.body && req.body.username === 'btd' && req.body.password === 'btd') {
+    if (req.body && models.users.auth(req.body.username, req.body.password)) {
         req.session.authenticated = true;
+        console.log('Logged in user "' + req.body.username + '" from ' + req.connection.remoteAddress);
         res.send('Access granted.');
         return;
     }
@@ -70,7 +71,6 @@ app.get('/people/experiences/:_id', function (req, res) {
 });
 
 app.get('/candidates/:gender', function (req, res) {
-    console.log('Here we go');
     res.send(models.people.candidates(req.params.gender));
 });
 

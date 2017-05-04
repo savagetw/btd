@@ -9,7 +9,7 @@
  */
 let fs = require('fs');
 
-module.exports = function PlainTextLoader(dataFile) {
+module.exports = function plainTextLoader(dataFile) {
     return new Promise(function (resolve, reject) {
         if (!fs.existsSync(dataFile)) {
             throw new Error(`Unable to load data file ${dataFile}`);

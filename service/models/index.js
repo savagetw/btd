@@ -2,9 +2,10 @@
 
 let _ = require('lodash');
 
-let CryptoLoader = require('./crypto-loader.js');
-let PlainTextLoader = require('./plaintext-loader.js');
-let CryptoSaver = require('./crypto-saver.js');
+let loaderType = process.env.BTD_DATA_PASSWORD ? 'crypto' : 'plaintext';
+let Loader = require(`./${loaderType}-loader.js`);
+let Saver = require(`./${loaderType}-saver.js`);
+
 let __data = {};
 let isDirty = false;
 
@@ -15,6 +16,7 @@ module.exports = function (dataFile) {
     
     setInterval(function () {
         if (!isDirty) {
+            console.log('Skipping save of data file (unchanged)');
             return;
         }
         save(dataFile);
@@ -24,6 +26,7 @@ module.exports = function (dataFile) {
         set: set, 
         get: get,
         find: find,
+        users: new Users(),
         people: new People(id),
         weekends: new Weekends(id),
         roles: new Roles(id),
@@ -32,11 +35,7 @@ module.exports = function (dataFile) {
 };
 
 function load(dataFile) {
-    // CryptoLoader(dataFile)
-    //     .then(function (data) {
-    //         __data = data;
-    //     });
-    PlainTextLoader(dataFile)
+    Loader(dataFile)
         .then(function (data) {
             __data = data;
         })
@@ -46,7 +45,7 @@ function load(dataFile) {
 }
 
 function save(dataFile) {
-    CryptoSaver(dataFile, __data)
+    Saver(dataFile, __data)
         .then(function (didSave) {
             if (didSave) {
                 isDirty = false;
@@ -108,6 +107,14 @@ function Meta() {
     }
 }
 
+function Users() {
+    this.auth = function (username, password) {
+        return !!__data.users.find(function (user) {
+            return user.username === username && user.password === password;
+        });
+    };
+}
+
 function People(id) {
     this.byId = function (_id) {
         return __data.people.find(function (person) {
@@ -132,6 +139,7 @@ function People(id) {
 
         if (existing) {
             existing.role = role;
+            isDirty = true;
             return;
         }
    
@@ -140,6 +148,7 @@ function People(id) {
             weekendNumber: weekend.weekendNumber,
             role: role
         });
+        isDirty = true;        
     }
 
     this.removeExperience = function (person, weekend) {
@@ -152,6 +161,7 @@ function People(id) {
             if (experience.weekendNumber === weekend.weekendNumber && experience.weekendGender === weekend.gender) {
                 console.log(`Removing experience on ${printWeekend(weekend)} from ${printPerson(person)}`);
                 person.experiences.splice(i, 1);
+                isDirty = true;
                 return;
             }
         }
@@ -256,6 +266,7 @@ function Weekends(id) {
     };
 
     this.set = function (gender, weekend) {
+        isDirty = true;
         __currentWeekend[gender] = weekend;
     }
 
@@ -294,6 +305,7 @@ function Weekends(id) {
             let attendee = weekend.attendees[i];
             if (attendee.role && attendee.role.title && attendee.role.title.toLowerCase() === 'rector') {
                 weekend.rector = attendee.person;
+                isDirty = true;
                 break;
             }
         }
@@ -310,11 +322,13 @@ function Weekends(id) {
 
         if (existing) {
             existing.role = role;
+            isDirty = true;
             return;
         }
 
         console.log(`Adding person ${printPerson(person)}`);
         weekend.attendees.push(new Attendee(person));
+        isDirty = true;
     };
 
     this.removeAttendee = function (weekend, person) {
@@ -323,6 +337,7 @@ function Weekends(id) {
             if (attendee.person._id === person._id) {
                 console.log(`Removing ${printPerson(person)} from ${printWeekend(weekend)}`)
                 weekend.attendees.splice(i, 1);
+                isDirty = true;
                 return;
             } 
         }
@@ -330,12 +345,14 @@ function Weekends(id) {
 
     this.setCurrentWeekendNumber = function (weekendNumber) {
         __data['meta'].currentWeekendNumber = weekendNumber;
+        isDirty = true;
         console.log(`Changed the current weekend number to ${weekendNumber}`);
     };
 
     this.add = function (weekendNumber) {
         __data.weekends.push(new Weekend('male', weekendNumber));
         __data.weekends.push(new Weekend('female', weekendNumber));
+        isDirty = true;
         console.log(`Added both Male and Female weekends #${weekendNumber}`);
     };
 
@@ -352,6 +369,7 @@ function Weekends(id) {
         }
 
         weekend.$closed = true;
+        isDirty = true;
         console.log(`Closed the ${gender} #${weekendNumber} weekend.`);
     };
 

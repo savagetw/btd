@@ -13,7 +13,7 @@ let zlib = require('zlib');
 
 const ALGORITHM = 'aes-256-ctr';
 
-module.exports = function CryptoLoader(dataFile) {
+module.exports = function cryptoLoader(dataFile) {
     return new Promise(function (resolve, reject) {
         if (!fs.existsSync(dataFile)) {
             throw new Error(`Unable to load data file ${dataFile}`);

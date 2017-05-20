@@ -3,9 +3,12 @@
 let express = require('express');
 let session = require('express-session')
 let app = express();
+let fs = require('fs');
 let bodyParser = require('body-parser');
 let url = require('url');
 let path = require('path');
+var https = require('https');
+var http = require('http');
 
 let config = require('../config.json');
 let models = require('./models')(config);
@@ -152,6 +155,19 @@ app.post('/admin', function (req, res) {
     }
 });
 
-app.listen(8080, '127.0.0.1', () => {
-    console.log('Server listening on port 8080.');
+let server;
+if (config.ssl) {
+    let securityOptions = {
+        cert: fs.readFileSync(config.ssl.certificate),
+        key: fs.readFileSync(config.ssl.key)
+    };
+    console.log(`Server is using HTTPS. Certificate=${config.ssl.certificate}, Key=${config.ssl.key}`);
+    server = https.createServer(securityOptions, app);
+} else {
+    console.log('Server is using unsecure HTTP');
+    server = http.createServer(app);
+}
+
+server.listen(config.port, '127.0.0.1', () => {
+    console.log(`Server listening on port ${config.port}`);
 });

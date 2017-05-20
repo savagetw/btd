@@ -3,5 +3,10 @@
     "dataFile": "data.json",
     "loaderType": "crypto",
     "saverType": "crypto",
-    "saveIntervalMs": 300000
+    "saveIntervalMs": 300000,
+    "port": 8080,
+    "ssl": {
+        "certificate": "server.crt",
+        "key": "server.key"
+    }
 }

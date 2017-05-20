@@ -13,7 +13,7 @@ var http = require('http');
 let config = require('../config.json');
 let models = require('./models')(config);
 
-app.use('/', express.static('ui'));
+app.use('/', express.static(path.join(__dirname, '..', 'ui')));
 
 app.use(session({
   secret: '--btd-session--',

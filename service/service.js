@@ -168,6 +168,6 @@ if (config.ssl) {
     server = http.createServer(app);
 }
 
-server.listen(config.port, '127.0.0.1', () => {
+server.listen(config.port, config.host || '127.0.0.1', () => {
     console.log(`Server listening on port ${config.port}`);
 });

@@ -1,2 +1,3 @@
-* Login form
-* Redirect to login form if no active session
+- [x] Migrate to config file instead of envvars
+- [ ] Write README.md
+- [ ] Use Joi to validate data file, error if invalid format.

@@ -8,20 +8,24 @@
  * data file becomes too large.
  */
 let fs = require('fs');
+let path = require('path');
 
-module.exports = function plainTextLoader(dataFile) {
-    return new Promise(function (resolve, reject) {
-        if (!fs.existsSync(dataFile)) {
-            throw new Error(`Unable to load data file ${dataFile}`);
-        }
+module.exports = function PlainTextLoader(config) {
+    this.load = function () {
+        return new Promise(function (resolve, reject) {
+            let dataFile = path.join(__dirname, '..', '..', config.dataFile);
+            if (!fs.existsSync(dataFile)) {
+                throw new Error(`Unable to load data file ${dataFile}`);
+            }
 
-        let loaded = '';
-        let stream = fs.createReadStream(dataFile)
-            .on('data', function (chunk) {
-                loaded += chunk;
-            })
-            .on('end', function () {
-                resolve(JSON.parse(loaded));
-            });
-    });
+            let loaded = '';
+            let stream = fs.createReadStream(dataFile)
+                .on('data', function (chunk) {
+                    loaded += chunk;
+                })
+                .on('end', function () {
+                    resolve(JSON.parse(loaded));
+                });
+        });
+    };
 };

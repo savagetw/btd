@@ -1,6 +1,10 @@
 'use strict';
 
-const TABLE_NAMES = require('../../config.json').table_names;
+const TABLE_NAMES = {
+    "male": ["Matthew", "Mark", "Luke", "John", "Peter", "James"],
+    "female": ["Rachel", "Rebekah", "Leah", "Ester"]
+};
+
 const BEST_SCORE = 100;
 const SEATS_PER_TABLE = 8;
 
@@ -19,7 +23,7 @@ module.exports = function assignToTables(candidates, silentProfessors, speakingP
 
     maxTables = maxTables || TABLE_NAMES.length;
     if (maxTables > TABLE_NAMES.length) {
-        throw new Error('Insuffient tables defined in config.json');
+        throw new Error('Insuffient tables defined.');
     }
 
     let tables = [];

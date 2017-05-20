@@ -7,8 +7,8 @@ let bodyParser = require('body-parser');
 let url = require('url');
 let path = require('path');
 
-let dataFile = process.env.BTD_DATA_FILE || path.join(__dirname, '..', '/data.json');
-let models = require('./models')(dataFile);
+let config = require('../config.json');
+let models = require('./models')(config);
 
 app.use('/', express.static('ui'));
 

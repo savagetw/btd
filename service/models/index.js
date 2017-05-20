@@ -2,25 +2,29 @@
 
 let _ = require('lodash');
 
-let loaderType = process.env.BTD_DATA_PASSWORD ? 'crypto' : 'plaintext';
-let Loader = require(`./${loaderType}-loader.js`);
-let Saver = require(`./${loaderType}-saver.js`);
-
 let __data = {};
 let isDirty = false;
 
-module.exports = function (dataFile) {
-    console.log(`Using data file ${dataFile}`);
+module.exports = function (config) {
+    let Loader = require(`./${config.loaderType}-loader.js`);
+    let Saver = require(`./${config.saverType}-saver.js`);
+    let loader = new Loader(config);
+    let saver = new Saver(config);
 
-    load(dataFile);
-    
+    loader.load().then(function (data) {
+        __data = data;
+    }).catch(function (err) {
+        console.log('Failed to load. Error: ' + err.message);
+        throw err;
+    });
+
     setInterval(function () {
         if (!isDirty) {
             console.log('Skipping save of data file (unchanged)');
             return;
         }
-        save(dataFile);
-    }, 300000);
+        save();
+    }, config.saveIntervalMs);
 
     return {
         set: set, 
@@ -32,35 +36,23 @@ module.exports = function (dataFile) {
         roles: new Roles(id),
         meta: new Meta()
     };
-};
 
-function load(dataFile) {
-    Loader(dataFile)
-        .then(function (data) {
-            __data = data;
-        })
-        .catch(function (err) {
-            console.log('Failed to load. Error:' + err);
-        });
-}
-
-function save(dataFile) {
-    Saver(dataFile, __data)
-        .then(function (didSave) {
+    function save() {
+        saver.save(__data).then(function (didSave) {
             if (didSave) {
                 isDirty = false;
             }
-        })
-        .catch(function (err) {
+        }).catch(function (err) {
             console.log(`Failed to save data. Error: ${err}`);
         });
-}
-
-function set(collection, key, value) {
-    isDirty = true;
-    __data[collection][key] = value;
-    save();
-}
+    }
+ 
+    function set(collection, key, value) {
+        isDirty = true;
+        __data[collection][key] = value;
+        save();
+    }
+};
 
 function get(collection, key) {
     if (key) {

@@ -1,6 +1,7 @@
 {
-    "table_names": {
-        "male": ["Matthew", "Mark", "Luke", "John", "Peter", "James"],
-        "female": ["Rachel", "Rebekah", "Leah", "Ester"]
-    }
+    "dataPassword": "",
+    "dataFile": "data.json",
+    "loaderType": "crypto",
+    "saverType": "crypto",
+    "saveIntervalMs": 300000
 }

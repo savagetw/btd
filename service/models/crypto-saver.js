@@ -18,38 +18,40 @@ let isSaving = false;
 
 // Async Promise. Resolves to `true` if save happened, resolves
 // to `false` if save was skipped.
-module.exports = function cryptoSaver(dataFile, currentData) {
-    return new Promise(function (resolve, reject) {
-        if (isSaving) {
-            console.log(`Already saving ${dataFile}`);
-            return resolve(false);
-        }
+module.exports = function CryptoSaver(config) {
+    this.save = function(currentData) {
+        return new Promise(function (resolve, reject) {
+            if (isSaving) {
+                console.log(`Already saving ${config.dataFile}`);
+                return resolve(false);
+            }
 
-        isSaving = true;
+            isSaving = true;
 
-        let password = process.env.BTD_DATA_PASSWORD;
-        if (!password) {
-            throw new Error('Must set BTD_DATA_PASSWORD environment variable.');
-        }
+            if (!config.dataPassword) {
+                throw new Error('Must set dataPassword config variable.');
+            }
 
-        if (fs.existsSync(dataFile)) {
-            fs.renameSync(dataFile, `${Date.now()}.${path.basename(dataFile)}`);
-        }
+            let dataFile = path.join(__dirname, '..', '..', config.dataFile);
+            if (fs.existsSync(dataFile)) {
+                fs.renameSync(dataFile, `${Date.now()}.${path.basename(dataFile)}`);
+            }
 
-        let stream = zlib.createGzip();
-        stream
-            .pipe(crypto.createCipher(ALGORITHM, password))
-            .pipe(fs.createWriteStream(dataFile))
-            .on('finish', function () {
-                isSaving = false;
-                console.log(`Saved file ${dataFile}`);
-                resolve(true);
-            })
-            .on('error', function (err) {
-                isSaving = false;
-                reject(err);
-            });
-        stream.write(JSON.stringify(currentData));
-        stream.end();
-    });
+            let stream = zlib.createGzip();
+            stream
+                .pipe(crypto.createCipher(ALGORITHM, config.dataPassword))
+                .pipe(fs.createWriteStream(dataFile))
+                .on('finish', function () {
+                    isSaving = false;
+                    console.log(`Saved file ${dataFile}`);
+                    resolve(true);
+                })
+                .on('error', function (err) {
+                    isSaving = false;
+                    reject(err);
+                });
+            stream.write(JSON.stringify(currentData));
+            stream.end();
+        });
+    };
 };

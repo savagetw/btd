@@ -158,8 +158,8 @@ app.post('/admin', function (req, res) {
 let server;
 if (config.ssl) {
     let securityOptions = {
-        cert: fs.readFileSync(config.ssl.certificate),
-        key: fs.readFileSync(config.ssl.key)
+        cert: fs.readFileSync(path.join(__dirname, '..', config.ssl.certificate)),
+        key: fs.readFileSync(path.join(__dirname, '..', config.ssl.key))
     };
     console.log(`Server is using HTTPS. Certificate=${config.ssl.certificate}, Key=${config.ssl.key}`);
     server = https.createServer(securityOptions, app);
